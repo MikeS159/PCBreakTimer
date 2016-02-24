@@ -15,7 +15,10 @@ using System.Reflection;
 namespace PCBreakTimer
 {
     public partial class MainProgramForm : Form
-    {        
+    {
+
+        #region Varibles
+
         private static SessionSwitchEventHandler sseh;
         SettingsForm userSettingsForm = new SettingsForm();
         Stopwatch homeStopWatch = new Stopwatch();
@@ -43,6 +46,9 @@ namespace PCBreakTimer
         int windowYPos = Properties.Settings.Default.WindowYPos;
         string timeFormat = "h'h 'm'm 's's'";
 
+        #endregion
+
+        #region FormElements
 
         public MainProgramForm()
         {
@@ -72,12 +78,57 @@ namespace PCBreakTimer
             this.sysTrayIcon.Icon = this.Icon;
             sysTrayIcon.Visible = true;
             sysTrayIcon.ShowBalloonTip(500);
-            if(startMinimized)
+            Start();
+            if (startMinimized)
             {
                 minimizeWindow();
             }
-            Start();
         }
+
+        private void showCurrentForm()
+        {
+            switch (currentForm)
+            {
+                case 1:
+                    this.Show();
+                    this.Activate();
+                    this.WindowState = FormWindowState.Normal;
+                    this.Left = windowXPos;
+                    this.Top = windowYPos;
+                    this.Height = 255;
+                    this.Width = 493;
+                    break;
+                case 2:
+                    userSettingsForm.Left = windowXPos;
+                    userSettingsForm.Top = windowYPos;
+                    userSettingsForm.Show();
+                    userSettingsForm.Activate();
+                    userSettingsForm.WindowState = FormWindowState.Normal;
+                    break;
+                default:
+                    this.Show();
+                    this.Activate();
+                    this.WindowState = FormWindowState.Normal;
+                    this.Left = windowXPos;
+                    this.Top = windowYPos;
+                    this.Height = 255;
+                    this.Width = 493;
+                    break;
+            }
+        }
+
+        private void minimizeWindow()
+        {
+            windowXPos = this.Left;
+            windowYPos = this.Top;
+            timer1.Enabled = false;            
+            this.WindowState = FormWindowState.Minimized;
+            this.Hide();
+        }
+
+        #endregion
+
+        #region Events
 
         /// <summary>
         /// Called when the session switch event is triggered
@@ -114,6 +165,83 @@ namespace PCBreakTimer
                 Lock();
             }
         }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            richTextBox1.ScrollToCaret();
+        }
+
+        #endregion
+
+        #region FormButtons
+
+        private void sysTrayIcon_MouseDoubleClick(object sender, EventArgs e)
+        {
+            timer1.Enabled = true;
+            showCurrentForm();
+        }
+
+        private void testLockBtn_Click(object sender, EventArgs e)
+        {
+            Lock();
+            richTextBox1.AppendText(DateTime.Now.ToString() + " Test Lock\n");
+        }
+
+        private void testUnlockBtn_Click(object sender, EventArgs e)
+        {
+            Unlock();
+            richTextBox1.AppendText(DateTime.Now.ToString() + " Test Unlock\n");
+        }
+
+        #endregion
+
+        #region Timers
+
+        /// <summary>
+        /// Used to update forms
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            homeUpdateTimeSpan = homeTimeSpan + homeStopWatch.Elapsed;
+            HomeTimeLabel.Text = homeUpdateTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+            awayUpdateTimeSpan = awayTimeSpan + awayStopwatch.Elapsed;
+            AwayTimeLabel.Text = awayUpdateTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+            lastBreakTimeSpan = lastBreakStopwatch.Elapsed;
+            LastBreakLabel.Text = lastBreakTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+            totalTime = homeUpdateTimeSpan + awayUpdateTimeSpan;
+            TotalTimeLabel.Text = totalTime.ToString(timeFormat, CultureInfo.InvariantCulture);
+            if (lastBreakTimeSpan > maxTime)
+            {
+                this.WindowState = FormWindowState.Normal;
+                this.Activate();
+                maxTime = maxTime.Add(addTime);
+                BreakWarningLabel.Visible = true;
+                if (popUpWarning)
+                {
+                    MessageBox.Show("Take a Break!", "Coffee Time", MessageBoxButtons.OK, MessageBoxIcon.Stop, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
+                }
+            }
+            if (totalTime > (workingDay + lunchTime))
+            {
+                label4.ForeColor = Color.Red;
+                TotalTimeLabel.ForeColor = Color.Red;
+            }
+            else
+            {
+                label4.ForeColor = Color.Black;
+                TotalTimeLabel.ForeColor = Color.Black;
+            }
+            double percentageAtDesk = 0;
+            percentageAtDesk = (100 - ((awayTimeSpan.TotalMilliseconds / totalTime.TotalMilliseconds) * 100));
+            percentageAtDesk = Math.Round(percentageAtDesk, 2);
+            PercentageLabel.Text = percentageAtDesk.ToString(CultureInfo.InvariantCulture) + " %";
+        }
+
+        #endregion
+
+        #region SessionEventMethods
 
         private void Start()
         {
@@ -173,102 +301,17 @@ namespace PCBreakTimer
             }
         }
 
-        /// <summary>
-        /// Used to update forms
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            homeUpdateTimeSpan = homeTimeSpan + homeStopWatch.Elapsed;
-            HomeTimeLabel.Text = homeUpdateTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
-            awayUpdateTimeSpan = awayTimeSpan + awayStopwatch.Elapsed;
-            AwayTimeLabel.Text = awayUpdateTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
-            lastBreakTimeSpan = lastBreakStopwatch.Elapsed;
-            LastBreakLabel.Text = lastBreakTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
-            totalTime = homeUpdateTimeSpan + awayUpdateTimeSpan;
-            TotalTimeLabel.Text = totalTime.ToString(timeFormat, CultureInfo.InvariantCulture);
-            if (lastBreakTimeSpan > maxTime)
-            {                
-                this.WindowState = FormWindowState.Normal;
-                this.Activate();
-                maxTime = maxTime.Add(addTime);
-                BreakWarningLabel.Visible = true;
-                if (popUpWarning)
-                {
-                    MessageBox.Show("Take a Break!", "Coffee Time", MessageBoxButtons.OK, MessageBoxIcon.Stop, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
-                }
-            }
-            if (totalTime > (workingDay + lunchTime))
-            {
-                label4.ForeColor = Color.Red;
-                TotalTimeLabel.ForeColor = Color.Red;
-            }
-            else
-            {
-                label4.ForeColor = Color.Black;
-                TotalTimeLabel.ForeColor = Color.Black;
-            }
-            double percentageAtDesk = 0;
-            percentageAtDesk = (100 - ((awayTimeSpan.TotalMilliseconds / totalTime.TotalMilliseconds) * 100));
-            percentageAtDesk = Math.Round(percentageAtDesk, 2);
-            PercentageLabel.Text = percentageAtDesk.ToString(CultureInfo.InvariantCulture) + " %";
-        }
+        #endregion
 
-        private void sysTrayIcon_MouseDoubleClick(object sender, EventArgs e)
-        {
-            timer1.Enabled = true;
-            showCurrentForm();          
-        }
-
-        private void showCurrentForm()
-        {
-            switch (currentForm)
-            {
-                case 1:
-                    this.Show();
-                    this.Activate();
-                    this.WindowState = FormWindowState.Normal;
-                    this.Left = windowXPos;
-                    this.Top = windowYPos;
-                    this.Height = 255;
-                    this.Width = 493;
-                    break;
-                case 2:
-                    userSettingsForm.Left = windowXPos;
-                    userSettingsForm.Top = windowYPos;
-                    userSettingsForm.Show();
-                    userSettingsForm.Activate();
-                    userSettingsForm.WindowState = FormWindowState.Normal;
-                    break;
-                default:
-                    this.Show();
-                    this.Activate();
-                    this.WindowState = FormWindowState.Normal;
-                    this.Left = windowXPos;
-                    this.Top = windowYPos;
-                    this.Height = 255;
-                    this.Width = 493;
-                    break;
-            }
-        }
+        #region MenuItems
 
         private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             minimizeWindow();
         }
 
-        private void minimizeWindow()
-        {
-            windowXPos = this.Left;
-            windowYPos = this.Top;
-            timer1.Enabled = false;
-            this.WindowState = FormWindowState.Minimized;
-            this.Hide();
-        }
-
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
-        {            
+        {
             DialogResult closeResult = MessageBox.Show("Are you sure you want to close?", "Close Program", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2, MessageBoxOptions.RightAlign);
             if (closeResult == DialogResult.Yes)
             {
@@ -279,7 +322,7 @@ namespace PCBreakTimer
             else if (closeResult == DialogResult.No)
             {
 
-            }            
+            }
         }
 
         private void readMeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -300,7 +343,7 @@ namespace PCBreakTimer
             string copyright = FileVersionInfo.GetVersionInfo(assem.Location).LegalCopyright;
             string comments = FileVersionInfo.GetVersionInfo(assem.Location).Comments;
             string assemVer = FileVersionInfo.GetVersionInfo(assem.Location).FileVersion;
-            string infoVer = FileVersionInfo.GetVersionInfo(assem.Location). ProductVersion;
+            string infoVer = FileVersionInfo.GetVersionInfo(assem.Location).ProductVersion;
             string s =
             programName + " by " +
             companyName + "\n" +
@@ -317,8 +360,11 @@ namespace PCBreakTimer
             updateUserSettings();
             currentForm = 1;
             showCurrentForm();
-            //Code to get settings goes here
         }
+
+        #endregion
+
+        #region Settings
 
         private void updateUserSettings()
         {
@@ -332,21 +378,7 @@ namespace PCBreakTimer
             popUpWarning = Properties.Settings.Default.PopUpWarning;
         }
 
-        private void testLockBtn_Click(object sender, EventArgs e)
-        {
-            Lock();
-            richTextBox1.AppendText(DateTime.Now.ToString() + " Test Lock\n");
-        }
+        #endregion
 
-        private void testUnlockBtn_Click(object sender, EventArgs e)
-        {
-            Unlock();
-            richTextBox1.AppendText(DateTime.Now.ToString() + " Test Unlock\n");
-        }
-
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-            richTextBox1.ScrollToCaret();
-        }
     }
 }
