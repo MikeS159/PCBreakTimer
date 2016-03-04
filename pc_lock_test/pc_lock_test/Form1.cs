@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PCBreakTimer.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,19 +33,20 @@ namespace PCBreakTimer
         TimeSpan awayUpdateTimeSpan = new TimeSpan();
         TimeSpan totalTime = new TimeSpan();
         NotifyIcon sysTrayIcon = new NotifyIcon();
-        TimeSpan defaultTime = Properties.Settings.Default.DefaultBreakTime;
-        TimeSpan maxTime = Properties.Settings.Default.DefaultBreakTime;
-        TimeSpan addTime = Properties.Settings.Default.AddTime;
-        TimeSpan workingDay = Properties.Settings.Default.WorkingDay;
-        TimeSpan lunchTime = Properties.Settings.Default.LunchTime;
+        TimeSpan defaultTime = Settings.Default.DefaultBreakTime;
+        TimeSpan maxTime = Settings.Default.DefaultBreakTime;
+        TimeSpan addTime = Settings.Default.AddTime;
+        TimeSpan workingDay = Settings.Default.WorkingDay;
+        TimeSpan lunchTime = Settings.Default.LunchTime;
 
         bool firstEvent = true;
-        bool popUpWarning = Properties.Settings.Default.PopUpWarning;
-        bool startMinimized = Properties.Settings.Default.StartMinimized;
+        bool popUpWarning = Settings.Default.PopUpWarning;
+        bool startMinimized = Settings.Default.StartMinimized;
         int currentForm = 1;
-        int windowXPos = Properties.Settings.Default.WindowXPos;
-        int windowYPos = Properties.Settings.Default.WindowYPos;
+        int windowXPos = Settings.Default.WindowXPos;
+        int windowYPos = Settings.Default.WindowYPos;
         string timeFormat = "h'h 'm'm 's's'";
+        private bool allowVisible = false;
 
         #endregion
 
@@ -53,8 +55,25 @@ namespace PCBreakTimer
         public MainProgramForm()
         {
             InitializeComponent();
-            #if DEBUG
-                testLockBtn.Enabled = true;
+            if (Settings.Default.UpgradeRequired)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeRequired = false;
+                Settings.Default.Save();
+                reloadSettings();
+            }
+            allowVisible = !startMinimized;
+            sseh = new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
+            SystemEvents.SessionSwitch += sseh;
+            sysTrayIcon.MouseDoubleClick += new MouseEventHandler(sysTrayIcon_MouseDoubleClick);
+            sysTrayIcon.BalloonTipText = "Timers Running";
+            this.sysTrayIcon.Icon = this.Icon;
+            sysTrayIcon.Visible = true;
+            sysTrayIcon.ShowBalloonTip(500);
+            Start();
+
+#if DEBUG
+            testLockBtn.Enabled = true;
                 testLockBtn.Visible = true;
                 testUnlockBtn.Enabled = true;
                 testUnlockBtn.Visible = true;
@@ -70,19 +89,21 @@ namespace PCBreakTimer
         {
             this.Left = windowXPos;
             this.Top = windowYPos;
-            sseh = new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
-            SystemEvents.SessionSwitch += sseh;
             richTextBox1.AppendText(DateTime.Now.ToString() + "\n");
-            sysTrayIcon.MouseDoubleClick += new MouseEventHandler(sysTrayIcon_MouseDoubleClick);
-            sysTrayIcon.BalloonTipText = "Timers Running";
-            this.sysTrayIcon.Icon = this.Icon;
-            sysTrayIcon.Visible = true;
-            sysTrayIcon.ShowBalloonTip(500);
-            Start();
             if (startMinimized)
             {
                 minimizeWindow();
             }
+        }
+
+        protected override void SetVisibleCore(bool value)
+        {
+            if (!allowVisible)
+            {
+                value = false;
+                if (!this.IsHandleCreated) CreateHandle();
+            }
+            base.SetVisibleCore(value);
         }
 
         private void showCurrentForm()
@@ -178,6 +199,7 @@ namespace PCBreakTimer
         private void sysTrayIcon_MouseDoubleClick(object sender, EventArgs e)
         {
             timer1.Enabled = true;
+            allowVisible = true;
             showCurrentForm();
         }
 
@@ -368,14 +390,27 @@ namespace PCBreakTimer
 
         private void updateUserSettings()
         {
-            lunchTime = Properties.Settings.Default.LunchTime;
-            workingDay = Properties.Settings.Default.WorkingDay;
-            addTime = Properties.Settings.Default.AddTime;
-            defaultTime = Properties.Settings.Default.DefaultBreakTime;
+            lunchTime = Settings.Default.LunchTime;
+            workingDay = Settings.Default.WorkingDay;
+            addTime = Settings.Default.AddTime;
+            defaultTime = Settings.Default.DefaultBreakTime;
             //maxTime = defaultTime;
-            windowXPos = Properties.Settings.Default.WindowXPos;
-            windowYPos = Properties.Settings.Default.WindowYPos;
-            popUpWarning = Properties.Settings.Default.PopUpWarning;
+            windowXPos = Settings.Default.WindowXPos;
+            windowYPos = Settings.Default.WindowYPos;
+            popUpWarning = Settings.Default.PopUpWarning;
+        }
+
+        private void reloadSettings()
+        {
+            TimeSpan defaultTime = Settings.Default.DefaultBreakTime;
+            TimeSpan maxTime = Settings.Default.DefaultBreakTime;
+            TimeSpan addTime = Settings.Default.AddTime;
+            TimeSpan workingDay = Settings.Default.WorkingDay;
+            TimeSpan lunchTime = Settings.Default.LunchTime;
+            bool popUpWarning = Settings.Default.PopUpWarning;
+            bool startMinimized = Settings.Default.StartMinimized;
+            int windowXPos = Settings.Default.WindowXPos;
+            int windowYPos = Settings.Default.WindowYPos;
         }
 
         #endregion
