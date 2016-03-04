@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PCBreakTimer.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,14 +25,14 @@ namespace PCBreakTimer
 
         private void setFormToUserSettings()
         {
-            LunchTimeTextBox.Text = Properties.Settings.Default.LunchTime.ToString();
-            WorkDayTextBox.Text = Properties.Settings.Default.WorkingDay.ToString();
-            AddTimeTextBox.Text = Properties.Settings.Default.AddTime.ToString();
-            MaxTimeTextBox.Text = Properties.Settings.Default.DefaultBreakTime.ToString();
-            WinXPosTextBox.Text = Properties.Settings.Default.WindowXPos.ToString();
-            WinYPosTextBox.Text = Properties.Settings.Default.WindowYPos.ToString();
-            PopupMessageCheckBox.Checked = Properties.Settings.Default.PopUpWarning;
-            StartMinimizedCheckBox.Checked = Properties.Settings.Default.StartMinimized;
+            LunchTimeTextBox.Text = Settings.Default.LunchTime.ToString();
+            WorkDayTextBox.Text = Settings.Default.WorkingDay.ToString();
+            AddTimeTextBox.Text = Settings.Default.AddTime.ToString();
+            MaxTimeTextBox.Text = Settings.Default.DefaultBreakTime.ToString();
+            WinXPosTextBox.Text = Settings.Default.WindowXPos.ToString();
+            WinYPosTextBox.Text = Settings.Default.WindowYPos.ToString();
+            PopupMessageCheckBox.Checked = Settings.Default.PopUpWarning;
+            StartMinimizedCheckBox.Checked = Settings.Default.StartMinimized;
         }
 
         private void SettingsForm_Load(object sender, EventArgs e)
@@ -45,8 +46,8 @@ namespace PCBreakTimer
             
             if (TimeSpan.TryParse(LunchTimeTextBox.Text, out tempSpan))
             {
-                Properties.Settings.Default.LunchTime = tempSpan;
-                Properties.Settings.Default.Save();
+                Settings.Default.LunchTime = tempSpan;
+                Settings.Default.Save();
             }
             else
             {
@@ -55,8 +56,8 @@ namespace PCBreakTimer
             
             if (TimeSpan.TryParse(WorkDayTextBox.Text, out tempSpan))
             {
-                Properties.Settings.Default.WorkingDay = tempSpan;
-                Properties.Settings.Default.Save();
+                Settings.Default.WorkingDay = tempSpan;
+                Settings.Default.Save();
             }
             else
             {
@@ -64,8 +65,8 @@ namespace PCBreakTimer
             }
             if (TimeSpan.TryParse(AddTimeTextBox.Text, out tempSpan))
             {
-                Properties.Settings.Default.AddTime = tempSpan;
-                Properties.Settings.Default.Save();
+                Settings.Default.AddTime = tempSpan;
+                Settings.Default.Save();
             }
             else
             {
@@ -73,8 +74,8 @@ namespace PCBreakTimer
             }
             if (TimeSpan.TryParse(MaxTimeTextBox.Text, out tempSpan))
             {
-                Properties.Settings.Default.DefaultBreakTime = tempSpan;
-                Properties.Settings.Default.Save();
+                Settings.Default.DefaultBreakTime = tempSpan;
+                Settings.Default.Save();
             }
             else
             {
@@ -84,8 +85,8 @@ namespace PCBreakTimer
             int tempYPos = 0;
             if (Int32.TryParse(WinXPosTextBox.Text, out tempXPos))
             {
-                Properties.Settings.Default.WindowXPos = tempXPos;
-                Properties.Settings.Default.Save();
+                Settings.Default.WindowXPos = tempXPos;
+                Settings.Default.Save();
             }
             else
             {
@@ -93,16 +94,16 @@ namespace PCBreakTimer
             }
             if (Int32.TryParse(WinYPosTextBox.Text, out tempYPos))
             {
-                Properties.Settings.Default.WindowYPos = tempYPos;
-                Properties.Settings.Default.Save();
+                Settings.Default.WindowYPos = tempYPos;
+                Settings.Default.Save();
             }
             else
             {
                 MessageBox.Show("Please enter a valid integer");
             }
-            Properties.Settings.Default.PopUpWarning = PopupMessageCheckBox.Checked;
-            Properties.Settings.Default.StartMinimized = StartMinimizedCheckBox.Checked;
-            Properties.Settings.Default.Save();
+            Settings.Default.PopUpWarning = PopupMessageCheckBox.Checked;
+            Settings.Default.StartMinimized = StartMinimizedCheckBox.Checked;
+            Settings.Default.Save();
         }
     }
 }
