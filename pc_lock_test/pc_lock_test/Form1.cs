@@ -70,10 +70,13 @@ namespace PCBreakTimer
             this.sysTrayIcon.Icon = this.Icon;
             sysTrayIcon.Visible = true;
             sysTrayIcon.ShowBalloonTip(500);
+            this.Left = windowXPos;
+            this.Top = windowYPos;
+            richTextBox1.AppendText(DateTime.Now.ToString() + "\n");
             Start();
 
-#if DEBUG
-            testLockBtn.Enabled = true;
+            #if DEBUG
+                testLockBtn.Enabled = true;
                 testLockBtn.Visible = true;
                 testUnlockBtn.Enabled = true;
                 testUnlockBtn.Visible = true;
@@ -87,12 +90,13 @@ namespace PCBreakTimer
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Left = windowXPos;
-            this.Top = windowYPos;
-            richTextBox1.AppendText(DateTime.Now.ToString() + "\n");
             if (startMinimized)
             {
                 minimizeWindow();
+            }
+            else
+            {
+                showCurrentForm();
             }
         }
 

@@ -11,6 +11,7 @@ namespace PCBreakTimer
         
         static Version_History()
         {
+            programVersionHistory.Add("0.9.1 - 22/03/2016:", "Fixed start time issue when program startes minamized \n-Fixed issue with program starting with incorrect size");
             programVersionHistory.Add("0.9.0 - 04/03/2016:", "Program settings now persist between version upgrades \n-Program starts minimized properly when setting is selected");
             programVersionHistory.Add("0.8.2 - 04/02/2016:", "Reduced background CPU usage \n-Minor bug fixes");
             programVersionHistory.Add("0.8.1 - 02/09/2015:", "Fixed bug where multiple pop-up boxes would appear after closing settings page \n-Ensured that debug tools will only appear in debug builds");
