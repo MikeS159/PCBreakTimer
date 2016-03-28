@@ -201,10 +201,10 @@ namespace PCBreakTimer
         #region FormButtons
 
         private void sysTrayIcon_MouseDoubleClick(object sender, EventArgs e)
-        {
-            timer1.Enabled = true;
+        {            
             allowVisible = true;
             showCurrentForm();
+            timer1.Enabled = true;
         }
 
         private void testLockBtn_Click(object sender, EventArgs e)

@@ -2,9 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <PublishUrlHistory>publish\</PublishUrlHistory>
-    <InstallUrlHistory>http://procrastinatingengineer.uk/publish.htm/</InstallUrlHistory>
+    <InstallUrlHistory>https://www.dropbox.com/sh/mg9cyv3xk2bhx3k/AACX2tjiS00VDZZe0tYI31Nua%3fdl=0/|http://procrastinatingengineer.uk/publish.htm/</InstallUrlHistory>
     <SupportUrlHistory />
-    <UpdateUrlHistory>http://procrastinatingengineer.uk/</UpdateUrlHistory>
+    <UpdateUrlHistory>http://procrastinatingengineer.uk/publish.htm/|http://procrastinatingengineer.uk/</UpdateUrlHistory>
     <BootstrapperUrlHistory />
     <ErrorReportUrlHistory />
     <FallbackCulture>en-US</FallbackCulture>
