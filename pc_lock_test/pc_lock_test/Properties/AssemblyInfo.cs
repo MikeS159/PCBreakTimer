@@ -37,14 +37,14 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.9.2.*")]
 //[assembly: AssemblyFileVersion("1.5.*")]
 #if DEBUG
-[assembly: AssemblyInformationalVersion("0.9.1 DevBuild")]
+[assembly: AssemblyInformationalVersion("0.9.2 DevBuild")]
 [assembly: NeutralResourcesLanguage("en-GB")]
 #elif NIGHTLY
-[assembly: AssemblyInformationalVersion("0.9.1 Nightly")]
+[assembly: AssemblyInformationalVersion("0.9.2 Nightly")]
 #elif ALPHA
-[assembly: AssemblyInformationalVersion("0.9.1 Alpha")]
+[assembly: AssemblyInformationalVersion("0.9.2 Alpha")]
 #elif BETA
-[assembly: AssemblyInformationalVersion("0.9.1 Beta")]
+[assembly: AssemblyInformationalVersion("0.9.2 Beta")]
 #else
-[assembly: AssemblyInformationalVersion("0.9.1")]
+[assembly: AssemblyInformationalVersion("0.9.2")]
 #endif
