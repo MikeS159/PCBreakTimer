@@ -38,7 +38,7 @@ namespace PCBreakTimer
         TimeSpan addTime = Settings.Default.AddTime;
         TimeSpan workingDay = Settings.Default.WorkingDay;
         TimeSpan lunchTime = Settings.Default.LunchTime;
-
+        
         bool firstEvent = true;
         bool popUpWarning = Settings.Default.PopUpWarning;
         bool startMinimized = Settings.Default.StartMinimized;
@@ -72,7 +72,7 @@ namespace PCBreakTimer
             sysTrayIcon.ShowBalloonTip(500);
             this.Left = windowXPos;
             this.Top = windowYPos;
-            richTextBox1.AppendText(DateTime.Now.ToString() + "\n");
+            richTextBox1.AppendText(DateTime.Now.ToString(CultureInfo.InvariantCulture) + "\n");
             Start();
 
             #if DEBUG
@@ -162,7 +162,7 @@ namespace PCBreakTimer
         /// <param name="e"></param>
         private void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
         {
-            string s = DateTime.Now.ToString();
+            string s = DateTime.Now.ToString(CultureInfo.InvariantCulture);
             s = s + " " + e.Reason.ToString();
             richTextBox1.AppendText(s + "\n");
             if (e.Reason == SessionSwitchReason.SessionLogon)
@@ -210,13 +210,13 @@ namespace PCBreakTimer
         private void testLockBtn_Click(object sender, EventArgs e)
         {
             Lock();
-            richTextBox1.AppendText(DateTime.Now.ToString() + " Test Lock\n");
+            richTextBox1.AppendText(DateTime.Now.ToString(CultureInfo.InvariantCulture) + " Test Lock\n");
         }
 
         private void testUnlockBtn_Click(object sender, EventArgs e)
         {
             Unlock();
-            richTextBox1.AppendText(DateTime.Now.ToString() + " Test Unlock\n");
+            richTextBox1.AppendText(DateTime.Now.ToString(CultureInfo.InvariantCulture) + " Test Unlock\n");
         }
 
         #endregion
@@ -231,13 +231,13 @@ namespace PCBreakTimer
         private void timer1_Tick(object sender, EventArgs e)
         {
             homeUpdateTimeSpan = homeTimeSpan + homeStopWatch.Elapsed;
-            HomeTimeLabel.Text = homeUpdateTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+            HomeTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", ((int)homeUpdateTimeSpan.TotalHours), homeUpdateTimeSpan.Minutes, homeUpdateTimeSpan.Seconds);
             awayUpdateTimeSpan = awayTimeSpan + awayStopwatch.Elapsed;
-            AwayTimeLabel.Text = awayUpdateTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+            AwayTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", awayUpdateTimeSpan.TotalHours, awayUpdateTimeSpan.Minutes, awayUpdateTimeSpan.Seconds);
             lastBreakTimeSpan = lastBreakStopwatch.Elapsed;
-            LastBreakLabel.Text = lastBreakTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+            LastBreakLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", lastBreakTimeSpan.TotalHours, lastBreakTimeSpan.Minutes, lastBreakTimeSpan.Seconds);
             totalTime = homeUpdateTimeSpan + awayUpdateTimeSpan;
-            TotalTimeLabel.Text = totalTime.ToString(timeFormat, CultureInfo.InvariantCulture);
+            TotalTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", totalTime.TotalHours, totalTime.Minutes, totalTime.Seconds);
             if (lastBreakTimeSpan > maxTime)
             {
                 this.WindowState = FormWindowState.Normal;
@@ -367,7 +367,7 @@ namespace PCBreakTimer
             string programName = FileVersionInfo.GetVersionInfo(assem.Location).ProductName;
             string companyName = FileVersionInfo.GetVersionInfo(assem.Location).CompanyName;
             string copyright = FileVersionInfo.GetVersionInfo(assem.Location).LegalCopyright;
-            string comments = FileVersionInfo.GetVersionInfo(assem.Location).Comments;
+            //string comments = FileVersionInfo.GetVersionInfo(assem.Location).Comments;
             string assemVer = FileVersionInfo.GetVersionInfo(assem.Location).FileVersion;
             string infoVer = FileVersionInfo.GetVersionInfo(assem.Location).ProductVersion;
             string s =
@@ -406,15 +406,15 @@ namespace PCBreakTimer
 
         private void reloadSettings()
         {
-            TimeSpan defaultTime = Settings.Default.DefaultBreakTime;
-            TimeSpan maxTime = Settings.Default.DefaultBreakTime;
-            TimeSpan addTime = Settings.Default.AddTime;
-            TimeSpan workingDay = Settings.Default.WorkingDay;
-            TimeSpan lunchTime = Settings.Default.LunchTime;
-            bool popUpWarning = Settings.Default.PopUpWarning;
-            bool startMinimized = Settings.Default.StartMinimized;
-            int windowXPos = Settings.Default.WindowXPos;
-            int windowYPos = Settings.Default.WindowYPos;
+            defaultTime = Settings.Default.DefaultBreakTime;
+            maxTime = Settings.Default.DefaultBreakTime;
+            addTime = Settings.Default.AddTime;
+            workingDay = Settings.Default.WorkingDay;
+            lunchTime = Settings.Default.LunchTime;
+            popUpWarning = Settings.Default.PopUpWarning;
+            startMinimized = Settings.Default.StartMinimized;
+            windowXPos = Settings.Default.WindowXPos;
+            windowYPos = Settings.Default.WindowYPos;
         }
 
         #endregion

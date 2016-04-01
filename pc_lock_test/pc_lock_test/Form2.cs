@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -29,8 +30,8 @@ namespace PCBreakTimer
             WorkDayTextBox.Text = Settings.Default.WorkingDay.ToString();
             AddTimeTextBox.Text = Settings.Default.AddTime.ToString();
             MaxTimeTextBox.Text = Settings.Default.DefaultBreakTime.ToString();
-            WinXPosTextBox.Text = Settings.Default.WindowXPos.ToString();
-            WinYPosTextBox.Text = Settings.Default.WindowYPos.ToString();
+            WinXPosTextBox.Text = Settings.Default.WindowXPos.ToString(CultureInfo.InvariantCulture);
+            WinYPosTextBox.Text = Settings.Default.WindowYPos.ToString(CultureInfo.InvariantCulture);
             PopupMessageCheckBox.Checked = Settings.Default.PopUpWarning;
             StartMinimizedCheckBox.Checked = Settings.Default.StartMinimized;
         }

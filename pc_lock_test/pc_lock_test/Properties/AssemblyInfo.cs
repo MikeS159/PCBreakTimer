@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © Mike Simpson 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: NeutralResourcesLanguage("en-GB")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -34,17 +35,16 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.5.*")]
 [assembly: CLSCompliant(true)]
-[assembly: AssemblyVersion("0.9.2.*")]
+[assembly: AssemblyVersion("0.7.6.*")]
 //[assembly: AssemblyFileVersion("1.5.*")]
 #if DEBUG
-[assembly: AssemblyInformationalVersion("0.9.2 DevBuild")]
-[assembly: NeutralResourcesLanguage("en-GB")]
+[assembly: AssemblyInformationalVersion("0.7.6 DevBuild")]
 #elif NIGHTLY
-[assembly: AssemblyInformationalVersion("0.9.2 Nightly")]
+[assembly: AssemblyInformationalVersion("0.7.6 Nightly")]
 #elif ALPHA
-[assembly: AssemblyInformationalVersion("0.9.2 Alpha")]
+[assembly: AssemblyInformationalVersion("0.7.6 Alpha")]
 #elif BETA
-[assembly: AssemblyInformationalVersion("0.9.2 Beta")]
+[assembly: AssemblyInformationalVersion("0.7.6 Beta")]
 #else
-[assembly: AssemblyInformationalVersion("0.9.2")]
+[assembly: AssemblyInformationalVersion("0.7.6")]
 #endif
