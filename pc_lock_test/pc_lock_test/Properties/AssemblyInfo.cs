@@ -39,8 +39,6 @@ using System.Runtime.InteropServices;
 //[assembly: AssemblyFileVersion("1.5.*")]
 #if DEBUG
 [assembly: AssemblyInformationalVersion("0.7.6 DevBuild")]
-#elif NIGHTLY
-[assembly: AssemblyInformationalVersion("0.7.6 Nightly")]
 #elif ALPHA
 [assembly: AssemblyInformationalVersion("0.7.6 Alpha")]
 #elif BETA
