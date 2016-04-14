@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.Timers;
@@ -38,6 +39,7 @@ namespace PCBreakTimer
         TimeSpan addTime = Settings.Default.AddTime;
         TimeSpan workingDay = Settings.Default.WorkingDay;
         TimeSpan lunchTime = Settings.Default.LunchTime;
+        CultureInfo sessionCulture = new CultureInfo(Thread.CurrentThread.CurrentCulture.Name);
         
         bool firstEvent = true;
         bool popUpWarning = Settings.Default.PopUpWarning;
@@ -72,7 +74,7 @@ namespace PCBreakTimer
             sysTrayIcon.ShowBalloonTip(500);
             this.Left = windowXPos;
             this.Top = windowYPos;
-            richTextBox1.AppendText(DateTime.Now.ToString(CultureInfo.InvariantCulture) + "\n");
+            richTextBox1.AppendText(DateTime.Now.ToString(sessionCulture) + "\n");
             Start();
 
             #if DEBUG
@@ -162,7 +164,7 @@ namespace PCBreakTimer
         /// <param name="e"></param>
         private void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
         {
-            string s = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+            string s = DateTime.Now.ToString(sessionCulture);
             s = s + " " + e.Reason.ToString();
             richTextBox1.AppendText(s + "\n");
             if (e.Reason == SessionSwitchReason.SessionLogon)
@@ -210,13 +212,13 @@ namespace PCBreakTimer
         private void testLockBtn_Click(object sender, EventArgs e)
         {
             Lock();
-            richTextBox1.AppendText(DateTime.Now.ToString(CultureInfo.InvariantCulture) + " Test Lock\n");
+            richTextBox1.AppendText(DateTime.Now.ToString(sessionCulture) + " Test Lock\n");
         }
 
         private void testUnlockBtn_Click(object sender, EventArgs e)
         {
             Unlock();
-            richTextBox1.AppendText(DateTime.Now.ToString(CultureInfo.InvariantCulture) + " Test Unlock\n");
+            richTextBox1.AppendText(DateTime.Now.ToString(sessionCulture) + " Test Unlock\n");
         }
 
         #endregion
@@ -262,7 +264,7 @@ namespace PCBreakTimer
             double percentageAtDesk = 0;
             percentageAtDesk = (100 - ((awayTimeSpan.TotalMilliseconds / totalTime.TotalMilliseconds) * 100));
             percentageAtDesk = Math.Round(percentageAtDesk, 2);
-            PercentageLabel.Text = percentageAtDesk.ToString(CultureInfo.InvariantCulture) + " %";
+            PercentageLabel.Text = percentageAtDesk.ToString(sessionCulture) + " %";
         }
 
         #endregion
@@ -291,7 +293,7 @@ namespace PCBreakTimer
             lastBreakStopwatch.Reset();
             homeTimeSpan = homeTimeSpan + homeStopWatch.Elapsed;
             homeStopWatch.Reset();
-            HomeTimeLabel.Text = homeTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+            HomeTimeLabel.Text = homeTimeSpan.ToString(timeFormat, sessionCulture);
             maxTime = defaultTime;
             BreakWarningLabel.Visible = false;
             if (firstEvent) //This corrects timers if the program starts when the computer is locked
@@ -309,7 +311,7 @@ namespace PCBreakTimer
                 homeStopWatch.Start();
                 awayTimeSpan = awayTimeSpan + awayStopwatch.Elapsed;
                 awayStopwatch.Reset();
-                AwayTimeLabel.Text = awayTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+                AwayTimeLabel.Text = awayTimeSpan.ToString(timeFormat, sessionCulture);
                 lastBreakStopwatch.Start();
             }
             else
@@ -320,8 +322,8 @@ namespace PCBreakTimer
                 awayTimeSpan = awayTimeSpan + initialStopwatch.Elapsed;
                 awayStopwatch.Reset();
                 initialStopwatch.Reset();
-                HomeTimeLabel.Text = homeTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
-                AwayTimeLabel.Text = awayTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+                HomeTimeLabel.Text = homeTimeSpan.ToString(timeFormat, sessionCulture);
+                AwayTimeLabel.Text = awayTimeSpan.ToString(timeFormat, sessionCulture);
                 lastBreakStopwatch.Restart();
                 firstEvent = false;
             }

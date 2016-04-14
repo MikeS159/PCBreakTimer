@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.CancelSettingsButton = new System.Windows.Forms.Button();
             this.ApplyButton = new System.Windows.Forms.Button();
             this.LunchTimeTextBox = new System.Windows.Forms.TextBox();
             this.WorkDayTextBox = new System.Windows.Forms.TextBox();
@@ -48,15 +48,15 @@
             this.StartMinimizedCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
-            // CancelButton
+            // CancelSettingsButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(110, 238);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(75, 23);
-            this.CancelButton.TabIndex = 0;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.CancelSettingsButton.Location = new System.Drawing.Point(110, 238);
+            this.CancelSettingsButton.Name = "CancelSettingsButton";
+            this.CancelSettingsButton.Size = new System.Drawing.Size(75, 23);
+            this.CancelSettingsButton.TabIndex = 0;
+            this.CancelSettingsButton.Text = "Cancel";
+            this.CancelSettingsButton.UseVisualStyleBackColor = true;
+            this.CancelSettingsButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // ApplyButton
             // 
@@ -225,7 +225,7 @@
             this.Controls.Add(this.WorkDayTextBox);
             this.Controls.Add(this.LunchTimeTextBox);
             this.Controls.Add(this.ApplyButton);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.CancelSettingsButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -242,7 +242,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button CancelSettingsButton;
         private System.Windows.Forms.Button ApplyButton;
         private System.Windows.Forms.TextBox LunchTimeTextBox;
         private System.Windows.Forms.TextBox WorkDayTextBox;
