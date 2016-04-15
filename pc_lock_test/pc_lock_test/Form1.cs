@@ -82,6 +82,7 @@ namespace PCBreakTimer
                 testLockBtn.Visible = true;
                 testUnlockBtn.Enabled = true;
                 testUnlockBtn.Visible = true;
+                this.FormBorderStyle = FormBorderStyle.SizableToolWindow;
             #endif
         }
 
