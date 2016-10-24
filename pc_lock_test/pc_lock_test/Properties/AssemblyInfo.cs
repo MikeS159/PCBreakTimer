@@ -35,14 +35,14 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.5.*")]
 [assembly: CLSCompliant(true)]
-[assembly: AssemblyVersion("0.7.7.*")]
+[assembly: AssemblyVersion("0.7.8.*")]
 //[assembly: AssemblyFileVersion("1.5.*")]
 #if DEBUG
-[assembly: AssemblyInformationalVersion("0.7.7 DevBuild")]
+[assembly: AssemblyInformationalVersion("0.7.8 DevBuild")]
 #elif ALPHA
-[assembly: AssemblyInformationalVersion("0.7.7 Alpha")]
+[assembly: AssemblyInformationalVersion("0.7.8 Alpha")]
 #elif BETA
-[assembly: AssemblyInformationalVersion("0.7.7 Beta")]
+[assembly: AssemblyInformationalVersion("0.7.8 Beta")]
 #else
-[assembly: AssemblyInformationalVersion("0.7.7")]
+[assembly: AssemblyInformationalVersion("0.7.8")]
 #endif

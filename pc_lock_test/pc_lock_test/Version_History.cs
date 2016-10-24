@@ -11,8 +11,9 @@ namespace PCBreakTimer
         
         static Version_History()
         {
+            programVersionHistory.Add("0.7.8 - 24/10/2016:", "Added time left until home counter \n- Fixed bug where incorrect start time was shown");
             programVersionHistory.Add("0.7.7 - 14/04/2016:", "Dates and time now display correctly based on location");
-            programVersionHistory.Add("0.7.6 - 01/04/2016:", "Retroactivly edited version history for consistency \n- Fixed bug where user settings wouldn't be updated properly after upgrade \n-Fixed bug where times over 24 hours would only display upto 24 hours");
+            programVersionHistory.Add("0.7.6 - 01/04/2016:", "Retroactivly edited version history for consistency \n-Fixed bug where user settings wouldn't be updated properly after upgrade \n-Fixed bug where times over 24 hours would only display upto 24 hours");
             programVersionHistory.Add("0.7.5 - 28/03/2016:", "Fixed bug where timers would not always update when the program is mazimised");
             programVersionHistory.Add("0.7.4 - 22/03/2016:", "Fixed start time issue when program startes minamized \n-Fixed issue with program starting with incorrect size");
             programVersionHistory.Add("0.7.3 - 04/03/2016:", "Program settings now persist between version upgrades \n-Program starts minimized properly when setting is selected");

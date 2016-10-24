@@ -54,6 +54,8 @@
             this.testLockBtn = new System.Windows.Forms.Button();
             this.testUnlockBtn = new System.Windows.Forms.Button();
             this.BreakWarningLabel = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.TimeLeftLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,7 +64,7 @@
             this.richTextBox1.Location = new System.Drawing.Point(5, 27);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(275, 188);
+            this.richTextBox1.Size = new System.Drawing.Size(275, 227);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
@@ -131,9 +133,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(293, 126);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(57, 13);
+            this.label4.Size = new System.Drawing.Size(66, 13);
             this.label4.TabIndex = 8;
-            this.label4.Text = "Total Time";
+            this.label4.Text = "Total Time - ";
             // 
             // TotalTimeLabel
             // 
@@ -228,7 +230,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(296, 153);
+            this.label5.Location = new System.Drawing.Point(293, 192);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(79, 13);
             this.label5.TabIndex = 12;
@@ -237,7 +239,7 @@
             // PercentageLabel
             // 
             this.PercentageLabel.AutoSize = true;
-            this.PercentageLabel.Location = new System.Drawing.Point(396, 153);
+            this.PercentageLabel.Location = new System.Drawing.Point(393, 192);
             this.PercentageLabel.Name = "PercentageLabel";
             this.PercentageLabel.Size = new System.Drawing.Size(15, 13);
             this.PercentageLabel.TabIndex = 13;
@@ -246,7 +248,7 @@
             // testLockBtn
             // 
             this.testLockBtn.Enabled = false;
-            this.testLockBtn.Location = new System.Drawing.Point(294, 192);
+            this.testLockBtn.Location = new System.Drawing.Point(296, 231);
             this.testLockBtn.Name = "testLockBtn";
             this.testLockBtn.Size = new System.Drawing.Size(75, 23);
             this.testLockBtn.TabIndex = 14;
@@ -258,7 +260,7 @@
             // testUnlockBtn
             // 
             this.testUnlockBtn.Enabled = false;
-            this.testUnlockBtn.Location = new System.Drawing.Point(375, 192);
+            this.testUnlockBtn.Location = new System.Drawing.Point(377, 231);
             this.testUnlockBtn.Name = "testUnlockBtn";
             this.testUnlockBtn.Size = new System.Drawing.Size(75, 23);
             this.testUnlockBtn.TabIndex = 15;
@@ -271,19 +273,39 @@
             // 
             this.BreakWarningLabel.AutoSize = true;
             this.BreakWarningLabel.ForeColor = System.Drawing.Color.Red;
-            this.BreakWarningLabel.Location = new System.Drawing.Point(296, 176);
+            this.BreakWarningLabel.Location = new System.Drawing.Point(298, 215);
             this.BreakWarningLabel.Name = "BreakWarningLabel";
             this.BreakWarningLabel.Size = new System.Drawing.Size(72, 13);
             this.BreakWarningLabel.TabIndex = 16;
             this.BreakWarningLabel.Text = "Take a Break";
             this.BreakWarningLabel.Visible = false;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(293, 158);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(60, 13);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "Time Left - ";
+            // 
+            // TimeLeftLabel
+            // 
+            this.TimeLeftLabel.AutoSize = true;
+            this.TimeLeftLabel.Location = new System.Drawing.Point(393, 158);
+            this.TimeLeftLabel.Name = "TimeLeftLabel";
+            this.TimeLeftLabel.Size = new System.Drawing.Size(49, 13);
+            this.TimeLeftLabel.TabIndex = 18;
+            this.TimeLeftLabel.Text = "00:00:00";
+            // 
             // MainProgramForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(477, 221);
+            this.ClientSize = new System.Drawing.Size(477, 266);
             this.ControlBox = false;
+            this.Controls.Add(this.TimeLeftLabel);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.BreakWarningLabel);
             this.Controls.Add(this.testUnlockBtn);
             this.Controls.Add(this.testLockBtn);
@@ -343,6 +365,8 @@
         private System.Windows.Forms.Button testLockBtn;
         private System.Windows.Forms.Button testUnlockBtn;
         private System.Windows.Forms.Label BreakWarningLabel;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label TimeLeftLabel;
     }
 }
 

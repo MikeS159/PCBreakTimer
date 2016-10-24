@@ -62,10 +62,10 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>1926BE583C69D8AC9E5D77D0322F7A94F1E13F40</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>2B115866998FCE5BBB2358BCE8D81E474ACF2AE1</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>PC_Break_Timer_Key.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Key.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -106,7 +106,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>PC_Break_Timer_Key.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Key.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NationalInstruments.TestStand.Interop.API, Version=14.0.0.274, Culture=neutral, PublicKeyToken=ad9244eb3b825cd8">
@@ -166,7 +166,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
-    <None Include="PC_Break_Timer_Key.pfx" />
+    <None Include="Key.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

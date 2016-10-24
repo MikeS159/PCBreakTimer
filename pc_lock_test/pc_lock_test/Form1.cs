@@ -33,6 +33,7 @@ namespace PCBreakTimer
         TimeSpan homeUpdateTimeSpan = new TimeSpan();
         TimeSpan awayUpdateTimeSpan = new TimeSpan();
         TimeSpan totalTime = new TimeSpan();
+        TimeSpan timeUntilHome = new TimeSpan();
         NotifyIcon sysTrayIcon = new NotifyIcon();
         TimeSpan defaultTime = Settings.Default.DefaultBreakTime;
         TimeSpan maxTime = Settings.Default.DefaultBreakTime;
@@ -43,12 +44,13 @@ namespace PCBreakTimer
         
         bool firstEvent = true;
         bool popUpWarning = Settings.Default.PopUpWarning;
-        bool startMinimized = Settings.Default.StartMinimized;
+        bool startMinimized = true;//Settings.Default.StartMinimized;
         int currentForm = 1;
         int windowXPos = Settings.Default.WindowXPos;
         int windowYPos = Settings.Default.WindowYPos;
         string timeFormat = "h'h 'm'm 's's'";
         private bool allowVisible = false;
+        string startTime;
 
         #endregion
 
@@ -74,7 +76,7 @@ namespace PCBreakTimer
             sysTrayIcon.ShowBalloonTip(500);
             this.Left = windowXPos;
             this.Top = windowYPos;
-            richTextBox1.AppendText(DateTime.Now.ToString(sessionCulture) + "\n");
+            startTime = "Start Time - " + DateTime.Now.ToString(sessionCulture) + "\n";
             Start();
 
             #if DEBUG
@@ -93,6 +95,7 @@ namespace PCBreakTimer
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
+            richTextBox1.AppendText(startTime);
             if (startMinimized)
             {
                 minimizeWindow();
@@ -123,7 +126,7 @@ namespace PCBreakTimer
                     this.WindowState = FormWindowState.Normal;
                     this.Left = windowXPos;
                     this.Top = windowYPos;
-                    this.Height = 255;
+                    this.Height = 300;
                     this.Width = 493;
                     break;
                 case 2:
@@ -139,7 +142,7 @@ namespace PCBreakTimer
                     this.WindowState = FormWindowState.Normal;
                     this.Left = windowXPos;
                     this.Top = windowYPos;
-                    this.Height = 255;
+                    this.Height = 300;
                     this.Width = 493;
                     break;
             }
@@ -241,6 +244,8 @@ namespace PCBreakTimer
             LastBreakLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", lastBreakTimeSpan.TotalHours, lastBreakTimeSpan.Minutes, lastBreakTimeSpan.Seconds);
             totalTime = homeUpdateTimeSpan + awayUpdateTimeSpan;
             TotalTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", totalTime.TotalHours, totalTime.Minutes, totalTime.Seconds);
+            timeUntilHome = (workingDay.Add(lunchTime)).Subtract(totalTime);
+            TimeLeftLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", timeUntilHome.Hours, timeUntilHome.Minutes, timeUntilHome.Seconds);
             if (lastBreakTimeSpan > maxTime)
             {
                 this.WindowState = FormWindowState.Normal;
