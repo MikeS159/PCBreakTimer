@@ -237,15 +237,15 @@ namespace PCBreakTimer
         private void timer1_Tick(object sender, EventArgs e)
         {
             homeUpdateTimeSpan = homeTimeSpan + homeStopWatch.Elapsed;
-            HomeTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", ((int)homeUpdateTimeSpan.TotalHours), homeUpdateTimeSpan.Minutes, homeUpdateTimeSpan.Seconds);
+            HomeTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(homeUpdateTimeSpan.TotalHours)), homeUpdateTimeSpan.Minutes, homeUpdateTimeSpan.Seconds);
             awayUpdateTimeSpan = awayTimeSpan + awayStopwatch.Elapsed;
-            AwayTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", awayUpdateTimeSpan.TotalHours, awayUpdateTimeSpan.Minutes, awayUpdateTimeSpan.Seconds);
+            AwayTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(awayUpdateTimeSpan.TotalHours)), awayUpdateTimeSpan.Minutes, awayUpdateTimeSpan.Seconds);
             lastBreakTimeSpan = lastBreakStopwatch.Elapsed;
-            LastBreakLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", lastBreakTimeSpan.TotalHours, lastBreakTimeSpan.Minutes, lastBreakTimeSpan.Seconds);
+            LastBreakLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(lastBreakTimeSpan.TotalHours)), lastBreakTimeSpan.Minutes, lastBreakTimeSpan.Seconds);
             totalTime = homeUpdateTimeSpan + awayUpdateTimeSpan;
-            TotalTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", totalTime.TotalHours, totalTime.Minutes, totalTime.Seconds);
+            TotalTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(totalTime.TotalHours)), totalTime.Minutes, totalTime.Seconds);
             timeUntilHome = (workingDay.Add(lunchTime)).Subtract(totalTime);
-            TimeLeftLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", timeUntilHome.Hours, timeUntilHome.Minutes, timeUntilHome.Seconds);
+            TimeLeftLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(timeUntilHome.TotalHours)), timeUntilHome.Minutes, timeUntilHome.Seconds);
             if (lastBreakTimeSpan > maxTime)
             {
                 this.WindowState = FormWindowState.Normal;
