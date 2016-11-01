@@ -40,11 +40,13 @@ namespace PCBreakTimer
         TimeSpan addTime = Settings.Default.AddTime;
         TimeSpan workingDay = Settings.Default.WorkingDay;
         TimeSpan lunchTime = Settings.Default.LunchTime;
+        DateTime startTimeDT;
+        TimeSpan homeAt = new TimeSpan();
         CultureInfo sessionCulture = new CultureInfo(Thread.CurrentThread.CurrentCulture.Name);
         
         bool firstEvent = true;
         bool popUpWarning = Settings.Default.PopUpWarning;
-        bool startMinimized = true;//Settings.Default.StartMinimized;
+        bool startMinimized = Settings.Default.StartMinimized;
         int currentForm = 1;
         int windowXPos = Settings.Default.WindowXPos;
         int windowYPos = Settings.Default.WindowYPos;
@@ -76,6 +78,7 @@ namespace PCBreakTimer
             sysTrayIcon.ShowBalloonTip(500);
             this.Left = windowXPos;
             this.Top = windowYPos;
+            startTimeDT = DateTime.Now;
             startTime = "Start Time - " + DateTime.Now.ToString(sessionCulture) + "\n";
             Start();
 
@@ -96,6 +99,9 @@ namespace PCBreakTimer
         private void Form1_Load(object sender, EventArgs e)
         {
             richTextBox1.AppendText(startTime);
+            homeAt = new TimeSpan(startTimeDT.Hour, startTimeDT.Minute, startTimeDT.Second);
+            homeAt = homeAt.Add(workingDay.Add(lunchTime));
+            homeAtLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", Math.Floor(homeAt.TotalHours), homeAt.Minutes, homeAt.Seconds);
             if (startMinimized)
             {
                 minimizeWindow();

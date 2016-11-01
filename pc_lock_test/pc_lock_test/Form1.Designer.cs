@@ -56,6 +56,8 @@
             this.BreakWarningLabel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.TimeLeftLabel = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.homeAtLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -154,7 +156,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(477, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(484, 24);
             this.menuStrip1.TabIndex = 11;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -248,7 +250,7 @@
             // testLockBtn
             // 
             this.testLockBtn.Enabled = false;
-            this.testLockBtn.Location = new System.Drawing.Point(296, 231);
+            this.testLockBtn.Location = new System.Drawing.Point(290, 257);
             this.testLockBtn.Name = "testLockBtn";
             this.testLockBtn.Size = new System.Drawing.Size(75, 23);
             this.testLockBtn.TabIndex = 14;
@@ -260,7 +262,7 @@
             // testUnlockBtn
             // 
             this.testUnlockBtn.Enabled = false;
-            this.testUnlockBtn.Location = new System.Drawing.Point(377, 231);
+            this.testUnlockBtn.Location = new System.Drawing.Point(371, 257);
             this.testUnlockBtn.Name = "testUnlockBtn";
             this.testUnlockBtn.Size = new System.Drawing.Size(75, 23);
             this.testUnlockBtn.TabIndex = 15;
@@ -273,7 +275,7 @@
             // 
             this.BreakWarningLabel.AutoSize = true;
             this.BreakWarningLabel.ForeColor = System.Drawing.Color.Red;
-            this.BreakWarningLabel.Location = new System.Drawing.Point(298, 215);
+            this.BreakWarningLabel.Location = new System.Drawing.Point(298, 241);
             this.BreakWarningLabel.Name = "BreakWarningLabel";
             this.BreakWarningLabel.Size = new System.Drawing.Size(72, 13);
             this.BreakWarningLabel.TabIndex = 16;
@@ -298,12 +300,32 @@
             this.TimeLeftLabel.TabIndex = 18;
             this.TimeLeftLabel.Text = "00:00:00";
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(293, 216);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(48, 13);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "Home At";
+            // 
+            // homeAtLabel
+            // 
+            this.homeAtLabel.AutoSize = true;
+            this.homeAtLabel.Location = new System.Drawing.Point(393, 216);
+            this.homeAtLabel.Name = "homeAtLabel";
+            this.homeAtLabel.Size = new System.Drawing.Size(49, 13);
+            this.homeAtLabel.TabIndex = 20;
+            this.homeAtLabel.Text = "00:00:00";
+            // 
             // MainProgramForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(477, 266);
+            this.ClientSize = new System.Drawing.Size(484, 286);
             this.ControlBox = false;
+            this.Controls.Add(this.homeAtLabel);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.TimeLeftLabel);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.BreakWarningLabel);
@@ -367,6 +389,8 @@
         private System.Windows.Forms.Label BreakWarningLabel;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label TimeLeftLabel;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label homeAtLabel;
     }
 }
 
