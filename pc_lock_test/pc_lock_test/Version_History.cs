@@ -11,7 +11,8 @@ namespace PCBreakTimer
         
         static Version_History()
         {
-            programVersionHistory.Add("0.8.0 - 28/10/2016:", "Time to go home now displayed on the form \n- Application now auto updates from H drive");
+            programVersionHistory.Add("0.9.0 - 21/12/2016:", "Working patterns can now be entered to allow different lengths of day and lunch to be accounted for \n-Fixed bug where the start time wasn't being displayed until form loaded \n-Fixed window size bug, program now resizes to account for debug tools in debug mode");
+            programVersionHistory.Add("0.8.0 - 28/10/2016:", "Time to go home now displayed on the form \n-Application now auto updates from H drive");
             programVersionHistory.Add("0.7.9 - 26/10/2016:", "Fixed bug where hours would sometime be rounded up, giving incorrect time");
             programVersionHistory.Add("0.7.8 - 24/10/2016:", "Added time left until home counter \n- Fixed bug where incorrect start time was shown");
             programVersionHistory.Add("0.7.7 - 14/04/2016:", "Dates and time now display correctly based on location");

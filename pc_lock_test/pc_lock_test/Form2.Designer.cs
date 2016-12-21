@@ -46,11 +46,17 @@
             this.PopupMessageCheckBox = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.StartMinimizedCheckBox = new System.Windows.Forms.CheckBox();
+            this.useWorkingPatternCheckBox = new System.Windows.Forms.CheckBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.workingPatternTB = new System.Windows.Forms.TextBox();
+            this.lunchPatternTB = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // CancelSettingsButton
             // 
-            this.CancelSettingsButton.Location = new System.Drawing.Point(110, 238);
+            this.CancelSettingsButton.Location = new System.Drawing.Point(108, 310);
             this.CancelSettingsButton.Name = "CancelSettingsButton";
             this.CancelSettingsButton.Size = new System.Drawing.Size(75, 23);
             this.CancelSettingsButton.TabIndex = 0;
@@ -60,7 +66,7 @@
             // 
             // ApplyButton
             // 
-            this.ApplyButton.Location = new System.Drawing.Point(192, 238);
+            this.ApplyButton.Location = new System.Drawing.Point(190, 310);
             this.ApplyButton.Name = "ApplyButton";
             this.ApplyButton.Size = new System.Drawing.Size(75, 23);
             this.ApplyButton.TabIndex = 1;
@@ -130,7 +136,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(2, 175);
+            this.label6.Location = new System.Drawing.Point(2, 238);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(89, 13);
             this.label6.TabIndex = 10;
@@ -178,7 +184,7 @@
             this.PopupMessageCheckBox.AutoSize = true;
             this.PopupMessageCheckBox.Checked = true;
             this.PopupMessageCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.PopupMessageCheckBox.Location = new System.Drawing.Point(111, 175);
+            this.PopupMessageCheckBox.Location = new System.Drawing.Point(122, 237);
             this.PopupMessageCheckBox.Name = "PopupMessageCheckBox";
             this.PopupMessageCheckBox.Size = new System.Drawing.Size(15, 14);
             this.PopupMessageCheckBox.TabIndex = 16;
@@ -187,7 +193,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(2, 199);
+            this.label8.Location = new System.Drawing.Point(2, 262);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(78, 13);
             this.label8.TabIndex = 17;
@@ -196,18 +202,74 @@
             // StartMinimizedCheckBox
             // 
             this.StartMinimizedCheckBox.AutoSize = true;
-            this.StartMinimizedCheckBox.Location = new System.Drawing.Point(111, 199);
+            this.StartMinimizedCheckBox.Location = new System.Drawing.Point(122, 261);
             this.StartMinimizedCheckBox.Name = "StartMinimizedCheckBox";
             this.StartMinimizedCheckBox.Size = new System.Drawing.Size(15, 14);
             this.StartMinimizedCheckBox.TabIndex = 18;
             this.StartMinimizedCheckBox.UseVisualStyleBackColor = true;
             // 
+            // useWorkingPatternCheckBox
+            // 
+            this.useWorkingPatternCheckBox.AutoSize = true;
+            this.useWorkingPatternCheckBox.Location = new System.Drawing.Point(122, 286);
+            this.useWorkingPatternCheckBox.Name = "useWorkingPatternCheckBox";
+            this.useWorkingPatternCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.useWorkingPatternCheckBox.TabIndex = 19;
+            this.useWorkingPatternCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(2, 287);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(114, 13);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "User Working Patterns";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(2, 179);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(84, 13);
+            this.label10.TabIndex = 21;
+            this.label10.Text = "Working Pattern";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(2, 206);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(74, 13);
+            this.label11.TabIndex = 22;
+            this.label11.Text = "Lunch Pattern";
+            // 
+            // workingPatternTB
+            // 
+            this.workingPatternTB.Location = new System.Drawing.Point(111, 176);
+            this.workingPatternTB.Name = "workingPatternTB";
+            this.workingPatternTB.Size = new System.Drawing.Size(100, 20);
+            this.workingPatternTB.TabIndex = 23;
+            // 
+            // lunchPatternTB
+            // 
+            this.lunchPatternTB.Location = new System.Drawing.Point(111, 203);
+            this.lunchPatternTB.Name = "lunchPatternTB";
+            this.lunchPatternTB.Size = new System.Drawing.Size(100, 20);
+            this.lunchPatternTB.TabIndex = 24;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(292, 273);
+            this.ClientSize = new System.Drawing.Size(292, 345);
             this.ControlBox = false;
+            this.Controls.Add(this.lunchPatternTB);
+            this.Controls.Add(this.workingPatternTB);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.useWorkingPatternCheckBox);
             this.Controls.Add(this.StartMinimizedCheckBox);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.PopupMessageCheckBox);
@@ -260,5 +322,11 @@
         private System.Windows.Forms.CheckBox PopupMessageCheckBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox StartMinimizedCheckBox;
+        private System.Windows.Forms.CheckBox useWorkingPatternCheckBox;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox workingPatternTB;
+        private System.Windows.Forms.TextBox lunchPatternTB;
     }
 }

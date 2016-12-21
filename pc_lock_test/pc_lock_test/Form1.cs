@@ -40,23 +40,32 @@ namespace PCBreakTimer
         TimeSpan addTime = Settings.Default.AddTime;
         TimeSpan workingDay = Settings.Default.WorkingDay;
         TimeSpan lunchTime = Settings.Default.LunchTime;
+        string workingPattern = Settings.Default.WorkingPattern;
+        string lunchPattern = Settings.Default.LunchPattern;
+        bool userWorkingPattern = Settings.Default.UseWorkingPattern;
         DateTime startTimeDT;
         TimeSpan homeAt = new TimeSpan();
         CultureInfo sessionCulture = new CultureInfo(Thread.CurrentThread.CurrentCulture.Name);
-        
+
         bool firstEvent = true;
         bool popUpWarning = Settings.Default.PopUpWarning;
         bool startMinimized = Settings.Default.StartMinimized;
         int currentForm = 1;
         int windowXPos = Settings.Default.WindowXPos;
         int windowYPos = Settings.Default.WindowYPos;
+#if DEBUG
+        int windowHeight = 320;
+        int windowWidth = 500;
+#else
+        int windowHeight = 300;
+        int windowWidth = 500;
+#endif
         string timeFormat = "h'h 'm'm 's's'";
         private bool allowVisible = false;
-        string startTime;
 
-        #endregion
+#endregion
 
-        #region FormElements
+#region FormElements
 
         public MainProgramForm()
         {
@@ -67,6 +76,10 @@ namespace PCBreakTimer
                 Settings.Default.UpgradeRequired = false;
                 Settings.Default.Save();
                 reloadSettings();
+            }
+            if(userWorkingPattern)
+            {
+                parsePatterns();
             }
             allowVisible = !startMinimized;
             sseh = new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
@@ -79,16 +92,16 @@ namespace PCBreakTimer
             this.Left = windowXPos;
             this.Top = windowYPos;
             startTimeDT = DateTime.Now;
-            startTime = "Start Time - " + DateTime.Now.ToString(sessionCulture) + "\n";
+            richTextBox1.AppendText("Start Time - " + DateTime.Now.ToString(sessionCulture) + "\n");
             Start();
 
-            #if DEBUG
+#if DEBUG
                 testLockBtn.Enabled = true;
                 testLockBtn.Visible = true;
                 testUnlockBtn.Enabled = true;
                 testUnlockBtn.Visible = true;
                 this.FormBorderStyle = FormBorderStyle.SizableToolWindow;
-            #endif
+#endif
         }
 
         /// <summary>
@@ -98,7 +111,6 @@ namespace PCBreakTimer
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
-            richTextBox1.AppendText(startTime);
             homeAt = new TimeSpan(startTimeDT.Hour, startTimeDT.Minute, startTimeDT.Second);
             homeAt = homeAt.Add(workingDay.Add(lunchTime));
             homeAtLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", Math.Floor(homeAt.TotalHours), homeAt.Minutes, homeAt.Seconds);
@@ -132,8 +144,8 @@ namespace PCBreakTimer
                     this.WindowState = FormWindowState.Normal;
                     this.Left = windowXPos;
                     this.Top = windowYPos;
-                    this.Height = 300;
-                    this.Width = 493;
+                    this.Height = windowHeight;
+                    this.Width = windowWidth;
                     break;
                 case 2:
                     userSettingsForm.Left = windowXPos;
@@ -148,8 +160,8 @@ namespace PCBreakTimer
                     this.WindowState = FormWindowState.Normal;
                     this.Left = windowXPos;
                     this.Top = windowYPos;
-                    this.Height = 300;
-                    this.Width = 493;
+                    this.Height = windowHeight;
+                    this.Width = windowWidth;
                     break;
             }
         }
@@ -158,14 +170,14 @@ namespace PCBreakTimer
         {
             windowXPos = this.Left;
             windowYPos = this.Top;
-            timer1.Enabled = false;            
+            timer1.Enabled = false;
             this.WindowState = FormWindowState.Minimized;
             this.Hide();
         }
 
-        #endregion
+#endregion
 
-        #region Events
+#region Events
 
         /// <summary>
         /// Called when the session switch event is triggered
@@ -208,12 +220,12 @@ namespace PCBreakTimer
             richTextBox1.ScrollToCaret();
         }
 
-        #endregion
+#endregion
 
-        #region FormButtons
+#region FormButtons
 
         private void sysTrayIcon_MouseDoubleClick(object sender, EventArgs e)
-        {            
+        {
             allowVisible = true;
             showCurrentForm();
             timer1.Enabled = true;
@@ -231,9 +243,9 @@ namespace PCBreakTimer
             richTextBox1.AppendText(DateTime.Now.ToString(sessionCulture) + " Test Unlock\n");
         }
 
-        #endregion
+#endregion
 
-        #region Timers
+#region Timers
 
         /// <summary>
         /// Used to update forms
@@ -279,9 +291,9 @@ namespace PCBreakTimer
             PercentageLabel.Text = percentageAtDesk.ToString(sessionCulture) + " %";
         }
 
-        #endregion
+#endregion
 
-        #region SessionEventMethods
+#region SessionEventMethods
 
         private void Start()
         {
@@ -292,7 +304,7 @@ namespace PCBreakTimer
 
         private void Stop()
         {
-            homeStopWatch.Stop();            
+            homeStopWatch.Stop();
             homeTimeSpan = homeTimeSpan + homeStopWatch.Elapsed;
             homeStopWatch.Reset();
         }
@@ -341,9 +353,9 @@ namespace PCBreakTimer
             }
         }
 
-        #endregion
+#endregion
 
-        #region MenuItems
+#region MenuItems
 
         private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -402,9 +414,9 @@ namespace PCBreakTimer
             showCurrentForm();
         }
 
-        #endregion
+#endregion
 
-        #region Settings
+#region Settings
 
         private void updateUserSettings()
         {
@@ -416,6 +428,9 @@ namespace PCBreakTimer
             windowXPos = Settings.Default.WindowXPos;
             windowYPos = Settings.Default.WindowYPos;
             popUpWarning = Settings.Default.PopUpWarning;
+            workingPattern = Settings.Default.WorkingPattern;
+            lunchPattern = Settings.Default.LunchPattern;
+            userWorkingPattern = Settings.Default.UseWorkingPattern;
         }
 
         private void reloadSettings()
@@ -429,9 +444,75 @@ namespace PCBreakTimer
             startMinimized = Settings.Default.StartMinimized;
             windowXPos = Settings.Default.WindowXPos;
             windowYPos = Settings.Default.WindowYPos;
+            workingPattern = Settings.Default.WorkingPattern;
+            lunchPattern = Settings.Default.LunchPattern;
+            userWorkingPattern = Settings.Default.UseWorkingPattern;            
         }
 
-        #endregion
+        private void parsePatterns()
+        {
+            int daysInWeek = 7;
+            int day = -1;
+            string[] dailyWorkingTimes = workingPattern.Split(',');
+            string[] dailyLunchTimes = lunchPattern.Split(',');
+            if (dailyLunchTimes.Length == daysInWeek && dailyWorkingTimes.Length == daysInWeek)
+            {
+                DateTime today = DateTime.Now;
+                switch (today.DayOfWeek)
+                {
+                    case DayOfWeek.Monday:
+                        day = 0;
+                        break;
+                    case DayOfWeek.Tuesday:
+                        day = 1;
+                        break;
+                    case DayOfWeek.Wednesday:
+                        day = 2;
+                        break;
+                    case DayOfWeek.Thursday:
+                        day = 3;
+                        break;
+                    case DayOfWeek.Friday:
+                        day = 4;
+                        break;
+                    case DayOfWeek.Saturday:
+                        day = 5;
+                        break;
+                    case DayOfWeek.Sunday:
+                        day = 6;
+                        break;
+                    default:
+                        richTextBox1.AppendText("Critical date error");
+                        break;
+                }
+                if (0 <= day && day <= 6)
+                {
+                    TimeSpan tempSpan = new TimeSpan();
 
+                    if (TimeSpan.TryParse(dailyWorkingTimes[day], out tempSpan))
+                    {
+                        workingDay = tempSpan;
+                    }
+                    else
+                    {
+                        richTextBox1.AppendText("Work pattern not formatted correctly, switching to default times");
+                    }
+                    if (TimeSpan.TryParse(dailyLunchTimes[day], out tempSpan))
+                    {
+                        lunchTime = tempSpan;
+                    }
+                    else
+                    {
+                        richTextBox1.AppendText("Lunch pattern not formatted correctly, switching to default times");
+                    }
+                }
+                else
+                {
+                    richTextBox1.AppendText("Work and lunch patterns should contain 7 elements seperated by commas");
+                }
+            }
+#endregion
+
+        }
     }
 }

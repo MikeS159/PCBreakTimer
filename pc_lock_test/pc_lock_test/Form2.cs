@@ -32,8 +32,11 @@ namespace PCBreakTimer
             MaxTimeTextBox.Text = Settings.Default.DefaultBreakTime.ToString();
             WinXPosTextBox.Text = Settings.Default.WindowXPos.ToString(CultureInfo.InvariantCulture);
             WinYPosTextBox.Text = Settings.Default.WindowYPos.ToString(CultureInfo.InvariantCulture);
+            workingPatternTB.Text = Settings.Default.WorkingPattern;
+            lunchPatternTB.Text = Settings.Default.LunchPattern;
             PopupMessageCheckBox.Checked = Settings.Default.PopUpWarning;
             StartMinimizedCheckBox.Checked = Settings.Default.StartMinimized;
+            useWorkingPatternCheckBox.Checked = Settings.Default.UseWorkingPattern;
         }
 
         private void SettingsForm_Load(object sender, EventArgs e)
@@ -102,8 +105,11 @@ namespace PCBreakTimer
             {
                 MessageBox.Show("Please enter a valid integer");
             }
+            Settings.Default.WorkingPattern = workingPatternTB.Text;
+            Settings.Default.LunchPattern = lunchPatternTB.Text;
             Settings.Default.PopUpWarning = PopupMessageCheckBox.Checked;
             Settings.Default.StartMinimized = StartMinimizedCheckBox.Checked;
+            Settings.Default.UseWorkingPattern = useWorkingPatternCheckBox.Checked;
             Settings.Default.Save();
         }
     }

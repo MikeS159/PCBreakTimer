@@ -130,5 +130,41 @@ namespace PCBreakTimer.Properties {
                 this["UpgradeRequired"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("08:15:00,08:15:00,08:15:00,08:15:00,04:00:00,00:00:00,00:00:00")]
+        public string WorkingPattern {
+            get {
+                return ((string)(this["WorkingPattern"]));
+            }
+            set {
+                this["WorkingPattern"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:30:00,00:30:00,00:30:00,00:30:00,00:00:00,00:00:00,00:00:00")]
+        public string LunchPattern {
+            get {
+                return ((string)(this["LunchPattern"]));
+            }
+            set {
+                this["LunchPattern"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseWorkingPattern {
+            get {
+                return ((bool)(this["UseWorkingPattern"]));
+            }
+            set {
+                this["UseWorkingPattern"] = value;
+            }
+        }
     }
 }
