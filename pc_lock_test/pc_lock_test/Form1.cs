@@ -86,7 +86,8 @@ namespace PCBreakTimer
             SystemEvents.SessionSwitch += sseh;
             sysTrayIcon.MouseDoubleClick += new MouseEventHandler(sysTrayIcon_MouseDoubleClick);
             sysTrayIcon.BalloonTipText = "Timers Running";
-            this.sysTrayIcon.Icon = this.Icon;
+            //Icon ic = new Icon(@"C:\Users\T0177633\Documents\Projects\Git\PCBreakTimer\pc_lock_test\PC_Lock_Test\coffee-maker.ico");
+            this.sysTrayIcon.Icon = Resources.coffee_maker;
             sysTrayIcon.Visible = true;
             sysTrayIcon.ShowBalloonTip(500);
             this.Left = windowXPos;
