@@ -59,6 +59,7 @@
             this.TimeLeftLabel = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.homeAtLabel = new System.Windows.Forms.Label();
+            this.licenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -204,6 +205,7 @@
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.readMeToolStripMenuItem,
             this.versionHistoryToolStripMenuItem,
+            this.licenceToolStripMenuItem,
             this.aboutToolStripMenuItem1});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
@@ -319,6 +321,13 @@
             this.homeAtLabel.TabIndex = 20;
             this.homeAtLabel.Text = "00:00:00";
             // 
+            // licenceToolStripMenuItem
+            // 
+            this.licenceToolStripMenuItem.Name = "licenceToolStripMenuItem";
+            this.licenceToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.licenceToolStripMenuItem.Text = "Licence";
+            this.licenceToolStripMenuItem.Click += new System.EventHandler(this.licenceToolStripMenuItem_Click);
+            // 
             // MainProgramForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -393,6 +402,7 @@
         private System.Windows.Forms.Label TimeLeftLabel;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label homeAtLabel;
+        private System.Windows.Forms.ToolStripMenuItem licenceToolStripMenuItem;
     }
 }
 

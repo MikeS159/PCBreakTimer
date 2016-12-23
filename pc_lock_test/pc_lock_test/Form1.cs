@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using JR.Utils.GUI.Forms;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -385,7 +386,13 @@ namespace PCBreakTimer
 
         private void versionHistoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Version_History.returnString());
+            FlexibleMessageBox.Show(Version_History.returnString());
+            //MessageBox.Show(Version_History.returnString());
+        }
+
+        private void licenceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlexibleMessageBox.Show("The MIT License (MIT) Copyright © 2016 Mike Simpson \n\n" + "This program also uses Flexible Message Box (https://www.codeproject.com/articles/601900/flexiblemessagebox-a-flexible-replacement-for-the) \n\n" + "Icon from - http://www.flaticon.com/authors/madebyoliver \nAvalible under the Creative Commons Licence 3.0 http://creativecommons.org/licenses/by/3.0/");
         }
 
         private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
