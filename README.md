@@ -17,4 +17,4 @@ There are also several options that allow you to customise the software
   - Window positions - where the program is located when it is maximised
   - Popup messages - Turn on/off the option to have popups tell you when to take a break
   
-Please report any bugs you find.
+Please report any bugs you find. Source code to be released soon(ish)
