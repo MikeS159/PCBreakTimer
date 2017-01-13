@@ -63,9 +63,9 @@ namespace PCBreakTimer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon coffee_maker {
+        internal static System.Drawing.Icon Coffee {
             get {
-                object obj = ResourceManager.GetObject("coffee_maker", resourceCulture);
+                object obj = ResourceManager.GetObject("Coffee", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
