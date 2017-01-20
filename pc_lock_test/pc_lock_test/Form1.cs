@@ -265,7 +265,7 @@ namespace PCBreakTimer
             totalTime = homeUpdateTimeSpan + awayUpdateTimeSpan;
             TotalTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(totalTime.TotalHours)), totalTime.Minutes, totalTime.Seconds);
             timeUntilHome = (workingDay.Add(lunchTime)).Subtract(totalTime);
-            TimeLeftLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(timeUntilHome.TotalHours)), timeUntilHome.Minutes, timeUntilHome.Seconds);
+            TimeLeftLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(Math.Abs(timeUntilHome.TotalHours))), Math.Abs(timeUntilHome.Minutes), Math.Abs(timeUntilHome.Seconds));
             if (lastBreakTimeSpan > maxTime)
             {
                 this.WindowState = FormWindowState.Normal;
@@ -281,6 +281,7 @@ namespace PCBreakTimer
             {
                 label4.ForeColor = Color.Red;
                 TotalTimeLabel.ForeColor = Color.Red;
+                TimeLeftLabel.Text = "-" + TimeLeftLabel.Text;
             }
             else
             {
@@ -392,7 +393,7 @@ namespace PCBreakTimer
 
         private void licenceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FlexibleMessageBox.Show("The MIT License (MIT) Copyright © 2016 Mike Simpson \n\n" + "This program also uses Flexible Message Box (https://www.codeproject.com/articles/601900/flexiblemessagebox-a-flexible-replacement-for-the) \n\n" + "Icon from - http://www.flaticon.com/authors/madebyoliver \nAvalible under the Creative Commons Licence 3.0 http://creativecommons.org/licenses/by/3.0/");
+            FlexibleMessageBox.Show("The MIT License (MIT) Copyright © 2016 Mike Simpson \n\n" + "This program also uses Flexible Message Box (https://www.codeproject.com/articles/601900/flexiblemessagebox-a-flexible-replacement-for-the)");// + "Icon from - http://www.flaticon.com/authors/madebyoliver \nAvalible under the Creative Commons Licence 3.0 http://creativecommons.org/licenses/by/3.0/");
         }
 
         private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)

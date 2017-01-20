@@ -133,7 +133,7 @@ namespace PCBreakTimer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("08:15:00,08:15:00,08:15:00,08:15:00,04:00:00,00:00:00,00:00:00")]
+        [global::System.Configuration.DefaultSettingValueAttribute("08:15:00,08:15:00,08:15:00,08:15:00,00:00:10,00:00:00,00:00:00")]
         public string WorkingPattern {
             get {
                 return ((string)(this["WorkingPattern"]));

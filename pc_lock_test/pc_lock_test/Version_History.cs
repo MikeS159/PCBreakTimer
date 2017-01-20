@@ -11,6 +11,7 @@ namespace PCBreakTimer
         
         static Version_History()
         {
+            programVersionHistory.Add("0.9.3 - 20/01/2017:", "Fixed formatting issue with time left until home where each number would be negative, causing rounding problems for hours. One minus sign is now used \n-Changed icon to reduce .exe size");
             programVersionHistory.Add("0.9.2 - 23/12/2016:", "Flexible Message Box implemented so all items in version history can be read \n-Added licence info and attributes into program menu");
             programVersionHistory.Add("0.9.1 - 22/12/2016:", "Added new icon to be more distinctive");
             programVersionHistory.Add("0.9.0 - 21/12/2016:", "Working patterns can now be entered to allow different lengths of day and lunch to be accounted for \n-Fixed bug where the start time wasn't being displayed until form loaded \n-Fixed window size bug, program now resizes to account for debug tools in debug mode");

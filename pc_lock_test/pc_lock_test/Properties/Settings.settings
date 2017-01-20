@@ -30,7 +30,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="WorkingPattern" Type="System.String" Scope="User">
-      <Value Profile="(Default)">08:15:00,08:15:00,08:15:00,08:15:00,04:00:00,00:00:00,00:00:00</Value>
+      <Value Profile="(Default)">08:15:00,08:15:00,08:15:00,08:15:00,00:00:10,00:00:00,00:00:00</Value>
     </Setting>
     <Setting Name="LunchPattern" Type="System.String" Scope="User">
       <Value Profile="(Default)">00:30:00,00:30:00,00:30:00,00:30:00,00:00:00,00:00:00,00:00:00</Value>
