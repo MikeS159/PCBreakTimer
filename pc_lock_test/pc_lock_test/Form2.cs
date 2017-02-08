@@ -37,6 +37,7 @@ namespace PCBreakTimer
             PopupMessageCheckBox.Checked = Settings.Default.PopUpWarning;
             StartMinimizedCheckBox.Checked = Settings.Default.StartMinimized;
             useWorkingPatternCheckBox.Checked = Settings.Default.UseWorkingPattern;
+            keepUnlockedCheckBox.Checked = Settings.Default.KeepUnlocked;
         }
 
         private void SettingsForm_Load(object sender, EventArgs e)
@@ -110,6 +111,7 @@ namespace PCBreakTimer
             Settings.Default.PopUpWarning = PopupMessageCheckBox.Checked;
             Settings.Default.StartMinimized = StartMinimizedCheckBox.Checked;
             Settings.Default.UseWorkingPattern = useWorkingPatternCheckBox.Checked;
+            Settings.Default.KeepUnlocked = keepUnlockedCheckBox.Checked;
             Settings.Default.Save();
         }
     }

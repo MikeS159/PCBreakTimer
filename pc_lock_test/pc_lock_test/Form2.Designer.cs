@@ -53,11 +53,13 @@
             this.label11 = new System.Windows.Forms.Label();
             this.workingPatternTB = new System.Windows.Forms.TextBox();
             this.lunchPatternTB = new System.Windows.Forms.TextBox();
+            this.keepUnlockedCheckBox = new System.Windows.Forms.CheckBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // CancelSettingsButton
             // 
-            this.CancelSettingsButton.Location = new System.Drawing.Point(108, 310);
+            this.CancelSettingsButton.Location = new System.Drawing.Point(123, 333);
             this.CancelSettingsButton.Name = "CancelSettingsButton";
             this.CancelSettingsButton.Size = new System.Drawing.Size(75, 23);
             this.CancelSettingsButton.TabIndex = 0;
@@ -67,7 +69,7 @@
             // 
             // ApplyButton
             // 
-            this.ApplyButton.Location = new System.Drawing.Point(190, 310);
+            this.ApplyButton.Location = new System.Drawing.Point(205, 333);
             this.ApplyButton.Name = "ApplyButton";
             this.ApplyButton.Size = new System.Drawing.Size(75, 23);
             this.ApplyButton.TabIndex = 1;
@@ -259,12 +261,32 @@
             this.lunchPatternTB.Size = new System.Drawing.Size(100, 20);
             this.lunchPatternTB.TabIndex = 24;
             // 
+            // keepUnlockedCheckBox
+            // 
+            this.keepUnlockedCheckBox.AutoSize = true;
+            this.keepUnlockedCheckBox.Location = new System.Drawing.Point(122, 311);
+            this.keepUnlockedCheckBox.Name = "keepUnlockedCheckBox";
+            this.keepUnlockedCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.keepUnlockedCheckBox.TabIndex = 25;
+            this.keepUnlockedCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(2, 311);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(81, 13);
+            this.label12.TabIndex = 26;
+            this.label12.Text = "Keep Unlocked";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(292, 345);
+            this.ClientSize = new System.Drawing.Size(292, 368);
             this.ControlBox = false;
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.keepUnlockedCheckBox);
             this.Controls.Add(this.lunchPatternTB);
             this.Controls.Add(this.workingPatternTB);
             this.Controls.Add(this.label11);
@@ -330,5 +352,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox workingPatternTB;
         private System.Windows.Forms.TextBox lunchPatternTB;
+        private System.Windows.Forms.CheckBox keepUnlockedCheckBox;
+        private System.Windows.Forms.Label label12;
     }
 }

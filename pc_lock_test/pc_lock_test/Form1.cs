@@ -14,14 +14,14 @@ using Microsoft.Win32;
 using System.Timers;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace PCBreakTimer
 {
     public partial class MainProgramForm : Form
     {
-
         #region Varibles
-
+        
         private static SessionSwitchEventHandler sseh;
         SettingsForm userSettingsForm = new SettingsForm();
         Stopwatch homeStopWatch = new Stopwatch();
@@ -51,6 +51,7 @@ namespace PCBreakTimer
         bool firstEvent = true;
         bool popUpWarning = Settings.Default.PopUpWarning;
         bool startMinimized = Settings.Default.StartMinimized;
+        bool keepUnlocked = Settings.Default.KeepUnlocked;
         int currentForm = 1;
         int windowXPos = Settings.Default.WindowXPos;
         int windowYPos = Settings.Default.WindowYPos;
@@ -70,13 +71,19 @@ namespace PCBreakTimer
 
         public MainProgramForm()
         {
-            InitializeComponent();
+            InitializeComponent();            
+
             if (Settings.Default.UpgradeRequired)
             {
                 Settings.Default.Upgrade();
                 Settings.Default.UpgradeRequired = false;
                 Settings.Default.Save();
                 reloadSettings();
+            }
+            if(keepUnlocked)
+            {
+                // Set new state to prevent system sleep
+                changeUnlockState();
             }
             if(userWorkingPattern)
             {
@@ -274,7 +281,7 @@ namespace PCBreakTimer
                 BreakWarningLabel.Visible = true;
                 if (popUpWarning)
                 {
-                    MessageBox.Show("Take a Break!", "Coffee Time", MessageBoxButtons.OK, MessageBoxIcon.Stop, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
+                    MessageBox.Show("Take a Break!", "Coffee Time", MessageBoxButtons.OK, MessageBoxIcon.Stop, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
                 }
             }
             if (totalTime > (workingDay + lunchTime))
@@ -328,6 +335,10 @@ namespace PCBreakTimer
                 firstEvent = false;
                 initialStopwatch.Reset();
             }
+            if (keepUnlocked)
+            {
+                changeUnlockState();    //change unlock state while away from computer
+            }
         }
 
         private void Unlock()
@@ -353,6 +364,10 @@ namespace PCBreakTimer
                 AwayTimeLabel.Text = awayTimeSpan.ToString(timeFormat, sessionCulture);
                 lastBreakStopwatch.Restart();
                 firstEvent = false;
+                if (keepUnlocked)
+                {
+                    changeUnlockState();    //change unlock state which appears to be re-set when returning from lock
+                }
             }
         }
 
@@ -367,7 +382,7 @@ namespace PCBreakTimer
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult closeResult = MessageBox.Show("Are you sure you want to close?", "Close Program", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2, MessageBoxOptions.RightAlign);
+            DialogResult closeResult = MessageBox.Show("Are you sure you want to close?", "Close Program", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
             if (closeResult == DialogResult.Yes)
             {
                 sysTrayIcon.Visible = false;
@@ -440,6 +455,11 @@ namespace PCBreakTimer
             workingPattern = Settings.Default.WorkingPattern;
             lunchPattern = Settings.Default.LunchPattern;
             userWorkingPattern = Settings.Default.UseWorkingPattern;
+            if(!keepUnlocked == Settings.Default.KeepUnlocked)
+            {
+                keepUnlocked = Settings.Default.KeepUnlocked;
+                changeUnlockState();    //If the setting has been change, the unlock state needs to be upated
+            }
         }
 
         private void reloadSettings()
@@ -455,7 +475,8 @@ namespace PCBreakTimer
             windowYPos = Settings.Default.WindowYPos;
             workingPattern = Settings.Default.WorkingPattern;
             lunchPattern = Settings.Default.LunchPattern;
-            userWorkingPattern = Settings.Default.UseWorkingPattern;            
+            userWorkingPattern = Settings.Default.UseWorkingPattern;
+            keepUnlocked = Settings.Default.KeepUnlocked;
         }
 
         private void parsePatterns()
@@ -522,6 +543,44 @@ namespace PCBreakTimer
             }
 #endregion
 
+        }
+
+        protected override void OnClosed(System.EventArgs e)
+        {
+            base.OnClosed(e);
+            // Restore previous state
+            if (keepUnlocked)   //Re-set unlock state before program closes
+            {
+                changeUnlockState();
+            }
+        }
+
+        private void changeUnlockState()
+        {
+            uint status = NativeMethods.SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED);    //Call ex state method with correct flags
+            if (status == 0)
+            {
+                MessageBox.Show("SetThreadExecutionState failed. Do something here...");
+                Close();
+            }
+        }
+
+        internal static class NativeMethods
+        {
+            // Import SetThreadExecutionState Win32 API and necessary flags
+            [DllImport("kernel32.dll")]
+            public static extern uint SetThreadExecutionState(EXECUTION_STATE esFlags);
+        }
+
+        [FlagsAttribute]
+        public enum EXECUTION_STATE : uint
+        {
+            ES_AWAYMODE_REQUIRED = 0x00000040,
+            ES_CONTINUOUS = 0x80000000,
+            ES_DISPLAY_REQUIRED = 0x00000002,
+            ES_SYSTEM_REQUIRED = 0x00000001
+            // Legacy flag, should not be used.
+            // ES_USER_PRESENT = 0x00000004
         }
     }
 }

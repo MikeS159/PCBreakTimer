@@ -11,6 +11,8 @@ namespace PCBreakTimer
         
         static Version_History()
         {
+            programVersionHistory.Add("0.10.1 - 08/02/2017:", "Now allows screen off when the PC is locked and will resume keeping unlocked (if the user option is enabled) when unlocked again \n-Bug fix where text was incorrectly displayed on some message box windows and take a break message had the wrong tray icon");
+            programVersionHistory.Add("0.10.0 - 07/02/2017:", "Added user option to stop the computer locking or the screen going to sleep");
             programVersionHistory.Add("0.9.3 - 20/01/2017:", "Fixed formatting issue with time left until home where each number would be negative, causing rounding problems for hours. One minus sign is now used \n-Changed icon to reduce .exe size");
             programVersionHistory.Add("0.9.2 - 23/12/2016:", "Flexible Message Box implemented so all items in version history can be read \n-Added licence info and attributes into program menu");
             programVersionHistory.Add("0.9.1 - 22/12/2016:", "Added new icon to be more distinctive");
