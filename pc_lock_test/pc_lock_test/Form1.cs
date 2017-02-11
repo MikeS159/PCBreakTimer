@@ -5,21 +5,23 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using JR.Utils.GUI.Forms;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.Timers;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace PCBreakTimer
 {
     public partial class MainProgramForm : Form
     {
-
         #region Varibles
-
+        
         private static SessionSwitchEventHandler sseh;
         SettingsForm userSettingsForm = new SettingsForm();
         Stopwatch homeStopWatch = new Stopwatch();
@@ -32,29 +34,45 @@ namespace PCBreakTimer
         TimeSpan homeUpdateTimeSpan = new TimeSpan();
         TimeSpan awayUpdateTimeSpan = new TimeSpan();
         TimeSpan totalTime = new TimeSpan();
+        TimeSpan timeUntilHome = new TimeSpan();
         NotifyIcon sysTrayIcon = new NotifyIcon();
         TimeSpan defaultTime = Settings.Default.DefaultBreakTime;
         TimeSpan maxTime = Settings.Default.DefaultBreakTime;
         TimeSpan addTime = Settings.Default.AddTime;
         TimeSpan workingDay = Settings.Default.WorkingDay;
         TimeSpan lunchTime = Settings.Default.LunchTime;
+        string workingPattern = Settings.Default.WorkingPattern;
+        string lunchPattern = Settings.Default.LunchPattern;
+        bool userWorkingPattern = Settings.Default.UseWorkingPattern;
+        DateTime startTimeDT;
+        TimeSpan homeAt = new TimeSpan();
+        CultureInfo sessionCulture = new CultureInfo(Thread.CurrentThread.CurrentCulture.Name);
 
         bool firstEvent = true;
         bool popUpWarning = Settings.Default.PopUpWarning;
         bool startMinimized = Settings.Default.StartMinimized;
+        bool keepUnlocked = Settings.Default.KeepUnlocked;
         int currentForm = 1;
         int windowXPos = Settings.Default.WindowXPos;
         int windowYPos = Settings.Default.WindowYPos;
+#if DEBUG
+        int windowHeight = 320;
+        int windowWidth = 500;
+#else
+        int windowHeight = 300;
+        int windowWidth = 500;
+#endif
         string timeFormat = "h'h 'm'm 's's'";
         private bool allowVisible = false;
 
-        #endregion
+#endregion
 
-        #region FormElements
+#region FormElements
 
         public MainProgramForm()
         {
-            InitializeComponent();
+            InitializeComponent();            
+
             if (Settings.Default.UpgradeRequired)
             {
                 Settings.Default.Upgrade();
@@ -62,25 +80,37 @@ namespace PCBreakTimer
                 Settings.Default.Save();
                 reloadSettings();
             }
+            if(keepUnlocked)
+            {
+                // Set new state to prevent system sleep
+                changeUnlockState();
+            }
+            if(userWorkingPattern)
+            {
+                parsePatterns();
+            }
             allowVisible = !startMinimized;
             sseh = new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
             SystemEvents.SessionSwitch += sseh;
             sysTrayIcon.MouseDoubleClick += new MouseEventHandler(sysTrayIcon_MouseDoubleClick);
             sysTrayIcon.BalloonTipText = "Timers Running";
-            this.sysTrayIcon.Icon = this.Icon;
+            //Icon ic = new Icon(@"C:\Users\T0177633\Documents\Projects\Git\PCBreakTimer\pc_lock_test\PC_Lock_Test\coffee-maker.ico");
+            this.sysTrayIcon.Icon = Resources.Coffee;
             sysTrayIcon.Visible = true;
             sysTrayIcon.ShowBalloonTip(500);
             this.Left = windowXPos;
             this.Top = windowYPos;
-            richTextBox1.AppendText(DateTime.Now.ToString() + "\n");
+            startTimeDT = DateTime.Now;
+            richTextBox1.AppendText("Start Time - " + DateTime.Now.ToString(sessionCulture) + "\n");
             Start();
 
-            #if DEBUG
+#if DEBUG
                 testLockBtn.Enabled = true;
                 testLockBtn.Visible = true;
                 testUnlockBtn.Enabled = true;
                 testUnlockBtn.Visible = true;
-            #endif
+                this.FormBorderStyle = FormBorderStyle.SizableToolWindow;
+#endif
         }
 
         /// <summary>
@@ -90,6 +120,9 @@ namespace PCBreakTimer
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
+            homeAt = new TimeSpan(startTimeDT.Hour, startTimeDT.Minute, startTimeDT.Second);
+            homeAt = homeAt.Add(workingDay.Add(lunchTime));
+            homeAtLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", Math.Floor(homeAt.TotalHours), homeAt.Minutes, homeAt.Seconds);
             if (startMinimized)
             {
                 minimizeWindow();
@@ -120,8 +153,8 @@ namespace PCBreakTimer
                     this.WindowState = FormWindowState.Normal;
                     this.Left = windowXPos;
                     this.Top = windowYPos;
-                    this.Height = 255;
-                    this.Width = 493;
+                    this.Height = windowHeight;
+                    this.Width = windowWidth;
                     break;
                 case 2:
                     userSettingsForm.Left = windowXPos;
@@ -136,8 +169,8 @@ namespace PCBreakTimer
                     this.WindowState = FormWindowState.Normal;
                     this.Left = windowXPos;
                     this.Top = windowYPos;
-                    this.Height = 255;
-                    this.Width = 493;
+                    this.Height = windowHeight;
+                    this.Width = windowWidth;
                     break;
             }
         }
@@ -146,14 +179,14 @@ namespace PCBreakTimer
         {
             windowXPos = this.Left;
             windowYPos = this.Top;
-            timer1.Enabled = false;            
+            timer1.Enabled = false;
             this.WindowState = FormWindowState.Minimized;
             this.Hide();
         }
 
-        #endregion
+#endregion
 
-        #region Events
+#region Events
 
         /// <summary>
         /// Called when the session switch event is triggered
@@ -162,7 +195,7 @@ namespace PCBreakTimer
         /// <param name="e"></param>
         private void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
         {
-            string s = DateTime.Now.ToString();
+            string s = DateTime.Now.ToString(sessionCulture);
             s = s + " " + e.Reason.ToString();
             richTextBox1.AppendText(s + "\n");
             if (e.Reason == SessionSwitchReason.SessionLogon)
@@ -196,32 +229,32 @@ namespace PCBreakTimer
             richTextBox1.ScrollToCaret();
         }
 
-        #endregion
+#endregion
 
-        #region FormButtons
+#region FormButtons
 
         private void sysTrayIcon_MouseDoubleClick(object sender, EventArgs e)
         {
-            timer1.Enabled = true;
             allowVisible = true;
             showCurrentForm();
+            timer1.Enabled = true;
         }
 
         private void testLockBtn_Click(object sender, EventArgs e)
         {
             Lock();
-            richTextBox1.AppendText(DateTime.Now.ToString() + " Test Lock\n");
+            richTextBox1.AppendText(DateTime.Now.ToString(sessionCulture) + " Test Lock\n");
         }
 
         private void testUnlockBtn_Click(object sender, EventArgs e)
         {
             Unlock();
-            richTextBox1.AppendText(DateTime.Now.ToString() + " Test Unlock\n");
+            richTextBox1.AppendText(DateTime.Now.ToString(sessionCulture) + " Test Unlock\n");
         }
 
-        #endregion
+#endregion
 
-        #region Timers
+#region Timers
 
         /// <summary>
         /// Used to update forms
@@ -231,13 +264,15 @@ namespace PCBreakTimer
         private void timer1_Tick(object sender, EventArgs e)
         {
             homeUpdateTimeSpan = homeTimeSpan + homeStopWatch.Elapsed;
-            HomeTimeLabel.Text = homeUpdateTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+            HomeTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(homeUpdateTimeSpan.TotalHours)), homeUpdateTimeSpan.Minutes, homeUpdateTimeSpan.Seconds);
             awayUpdateTimeSpan = awayTimeSpan + awayStopwatch.Elapsed;
-            AwayTimeLabel.Text = awayUpdateTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+            AwayTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(awayUpdateTimeSpan.TotalHours)), awayUpdateTimeSpan.Minutes, awayUpdateTimeSpan.Seconds);
             lastBreakTimeSpan = lastBreakStopwatch.Elapsed;
-            LastBreakLabel.Text = lastBreakTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+            LastBreakLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(lastBreakTimeSpan.TotalHours)), lastBreakTimeSpan.Minutes, lastBreakTimeSpan.Seconds);
             totalTime = homeUpdateTimeSpan + awayUpdateTimeSpan;
-            TotalTimeLabel.Text = totalTime.ToString(timeFormat, CultureInfo.InvariantCulture);
+            TotalTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(totalTime.TotalHours)), totalTime.Minutes, totalTime.Seconds);
+            timeUntilHome = (workingDay.Add(lunchTime)).Subtract(totalTime);
+            TimeLeftLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(Math.Abs(timeUntilHome.TotalHours))), Math.Abs(timeUntilHome.Minutes), Math.Abs(timeUntilHome.Seconds));
             if (lastBreakTimeSpan > maxTime)
             {
                 this.WindowState = FormWindowState.Normal;
@@ -246,13 +281,14 @@ namespace PCBreakTimer
                 BreakWarningLabel.Visible = true;
                 if (popUpWarning)
                 {
-                    MessageBox.Show("Take a Break!", "Coffee Time", MessageBoxButtons.OK, MessageBoxIcon.Stop, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
+                    MessageBox.Show("Take a Break!", "Coffee Time", MessageBoxButtons.OK, MessageBoxIcon.Stop, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
                 }
             }
             if (totalTime > (workingDay + lunchTime))
             {
                 label4.ForeColor = Color.Red;
                 TotalTimeLabel.ForeColor = Color.Red;
+                TimeLeftLabel.Text = "-" + TimeLeftLabel.Text;
             }
             else
             {
@@ -262,12 +298,12 @@ namespace PCBreakTimer
             double percentageAtDesk = 0;
             percentageAtDesk = (100 - ((awayTimeSpan.TotalMilliseconds / totalTime.TotalMilliseconds) * 100));
             percentageAtDesk = Math.Round(percentageAtDesk, 2);
-            PercentageLabel.Text = percentageAtDesk.ToString(CultureInfo.InvariantCulture) + " %";
+            PercentageLabel.Text = percentageAtDesk.ToString(sessionCulture) + " %";
         }
 
-        #endregion
+#endregion
 
-        #region SessionEventMethods
+#region SessionEventMethods
 
         private void Start()
         {
@@ -278,7 +314,7 @@ namespace PCBreakTimer
 
         private void Stop()
         {
-            homeStopWatch.Stop();            
+            homeStopWatch.Stop();
             homeTimeSpan = homeTimeSpan + homeStopWatch.Elapsed;
             homeStopWatch.Reset();
         }
@@ -291,13 +327,17 @@ namespace PCBreakTimer
             lastBreakStopwatch.Reset();
             homeTimeSpan = homeTimeSpan + homeStopWatch.Elapsed;
             homeStopWatch.Reset();
-            HomeTimeLabel.Text = homeTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+            HomeTimeLabel.Text = homeTimeSpan.ToString(timeFormat, sessionCulture);
             maxTime = defaultTime;
             BreakWarningLabel.Visible = false;
             if (firstEvent) //This corrects timers if the program starts when the computer is locked
             {
                 firstEvent = false;
                 initialStopwatch.Reset();
+            }
+            if (keepUnlocked)
+            {
+                changeUnlockState();    //change unlock state while away from computer
             }
         }
 
@@ -309,7 +349,7 @@ namespace PCBreakTimer
                 homeStopWatch.Start();
                 awayTimeSpan = awayTimeSpan + awayStopwatch.Elapsed;
                 awayStopwatch.Reset();
-                AwayTimeLabel.Text = awayTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+                AwayTimeLabel.Text = awayTimeSpan.ToString(timeFormat, sessionCulture);
                 lastBreakStopwatch.Start();
             }
             else
@@ -320,16 +360,20 @@ namespace PCBreakTimer
                 awayTimeSpan = awayTimeSpan + initialStopwatch.Elapsed;
                 awayStopwatch.Reset();
                 initialStopwatch.Reset();
-                HomeTimeLabel.Text = homeTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
-                AwayTimeLabel.Text = awayTimeSpan.ToString(timeFormat, CultureInfo.InvariantCulture);
+                HomeTimeLabel.Text = homeTimeSpan.ToString(timeFormat, sessionCulture);
+                AwayTimeLabel.Text = awayTimeSpan.ToString(timeFormat, sessionCulture);
                 lastBreakStopwatch.Restart();
                 firstEvent = false;
+                if (keepUnlocked)
+                {
+                    changeUnlockState();    //change unlock state which appears to be re-set when returning from lock
+                }
             }
         }
 
-        #endregion
+#endregion
 
-        #region MenuItems
+#region MenuItems
 
         private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -338,7 +382,7 @@ namespace PCBreakTimer
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult closeResult = MessageBox.Show("Are you sure you want to close?", "Close Program", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2, MessageBoxOptions.RightAlign);
+            DialogResult closeResult = MessageBox.Show("Are you sure you want to close?", "Close Program", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
             if (closeResult == DialogResult.Yes)
             {
                 sysTrayIcon.Visible = false;
@@ -358,7 +402,13 @@ namespace PCBreakTimer
 
         private void versionHistoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Version_History.returnString());
+            FlexibleMessageBox.Show(Version_History.returnString());
+            //MessageBox.Show(Version_History.returnString());
+        }
+
+        private void licenceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlexibleMessageBox.Show("The MIT License (MIT) Copyright © 2016 Mike Simpson \n\n" + "This program also uses Flexible Message Box (https://www.codeproject.com/articles/601900/flexiblemessagebox-a-flexible-replacement-for-the)");// + "Icon from - http://www.flaticon.com/authors/madebyoliver \nAvalible under the Creative Commons Licence 3.0 http://creativecommons.org/licenses/by/3.0/");
         }
 
         private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -367,7 +417,7 @@ namespace PCBreakTimer
             string programName = FileVersionInfo.GetVersionInfo(assem.Location).ProductName;
             string companyName = FileVersionInfo.GetVersionInfo(assem.Location).CompanyName;
             string copyright = FileVersionInfo.GetVersionInfo(assem.Location).LegalCopyright;
-            string comments = FileVersionInfo.GetVersionInfo(assem.Location).Comments;
+            //string comments = FileVersionInfo.GetVersionInfo(assem.Location).Comments;
             string assemVer = FileVersionInfo.GetVersionInfo(assem.Location).FileVersion;
             string infoVer = FileVersionInfo.GetVersionInfo(assem.Location).ProductVersion;
             string s =
@@ -388,9 +438,9 @@ namespace PCBreakTimer
             showCurrentForm();
         }
 
-        #endregion
+#endregion
 
-        #region Settings
+#region Settings
 
         private void updateUserSettings()
         {
@@ -402,22 +452,135 @@ namespace PCBreakTimer
             windowXPos = Settings.Default.WindowXPos;
             windowYPos = Settings.Default.WindowYPos;
             popUpWarning = Settings.Default.PopUpWarning;
+            workingPattern = Settings.Default.WorkingPattern;
+            lunchPattern = Settings.Default.LunchPattern;
+            userWorkingPattern = Settings.Default.UseWorkingPattern;
+            if(!keepUnlocked == Settings.Default.KeepUnlocked)
+            {
+                keepUnlocked = Settings.Default.KeepUnlocked;
+                changeUnlockState();    //If the setting has been change, the unlock state needs to be upated
+            }
         }
 
         private void reloadSettings()
         {
-            TimeSpan defaultTime = Settings.Default.DefaultBreakTime;
-            TimeSpan maxTime = Settings.Default.DefaultBreakTime;
-            TimeSpan addTime = Settings.Default.AddTime;
-            TimeSpan workingDay = Settings.Default.WorkingDay;
-            TimeSpan lunchTime = Settings.Default.LunchTime;
-            bool popUpWarning = Settings.Default.PopUpWarning;
-            bool startMinimized = Settings.Default.StartMinimized;
-            int windowXPos = Settings.Default.WindowXPos;
-            int windowYPos = Settings.Default.WindowYPos;
+            defaultTime = Settings.Default.DefaultBreakTime;
+            maxTime = Settings.Default.DefaultBreakTime;
+            addTime = Settings.Default.AddTime;
+            workingDay = Settings.Default.WorkingDay;
+            lunchTime = Settings.Default.LunchTime;
+            popUpWarning = Settings.Default.PopUpWarning;
+            startMinimized = Settings.Default.StartMinimized;
+            windowXPos = Settings.Default.WindowXPos;
+            windowYPos = Settings.Default.WindowYPos;
+            workingPattern = Settings.Default.WorkingPattern;
+            lunchPattern = Settings.Default.LunchPattern;
+            userWorkingPattern = Settings.Default.UseWorkingPattern;
+            keepUnlocked = Settings.Default.KeepUnlocked;
         }
 
-        #endregion
+        private void parsePatterns()
+        {
+            int daysInWeek = 7;
+            int day = -1;
+            string[] dailyWorkingTimes = workingPattern.Split(',');
+            string[] dailyLunchTimes = lunchPattern.Split(',');
+            if (dailyLunchTimes.Length == daysInWeek && dailyWorkingTimes.Length == daysInWeek)
+            {
+                DateTime today = DateTime.Now;
+                switch (today.DayOfWeek)
+                {
+                    case DayOfWeek.Monday:
+                        day = 0;
+                        break;
+                    case DayOfWeek.Tuesday:
+                        day = 1;
+                        break;
+                    case DayOfWeek.Wednesday:
+                        day = 2;
+                        break;
+                    case DayOfWeek.Thursday:
+                        day = 3;
+                        break;
+                    case DayOfWeek.Friday:
+                        day = 4;
+                        break;
+                    case DayOfWeek.Saturday:
+                        day = 5;
+                        break;
+                    case DayOfWeek.Sunday:
+                        day = 6;
+                        break;
+                    default:
+                        richTextBox1.AppendText("Critical date error");
+                        break;
+                }
+                if (0 <= day && day <= 6)
+                {
+                    TimeSpan tempSpan = new TimeSpan();
 
+                    if (TimeSpan.TryParse(dailyWorkingTimes[day], out tempSpan))
+                    {
+                        workingDay = tempSpan;
+                    }
+                    else
+                    {
+                        richTextBox1.AppendText("Work pattern not formatted correctly, switching to default times");
+                    }
+                    if (TimeSpan.TryParse(dailyLunchTimes[day], out tempSpan))
+                    {
+                        lunchTime = tempSpan;
+                    }
+                    else
+                    {
+                        richTextBox1.AppendText("Lunch pattern not formatted correctly, switching to default times");
+                    }
+                }
+                else
+                {
+                    richTextBox1.AppendText("Work and lunch patterns should contain 7 elements seperated by commas");
+                }
+            }
+#endregion
+
+        }
+
+        protected override void OnClosed(System.EventArgs e)
+        {
+            base.OnClosed(e);
+            // Restore previous state
+            if (keepUnlocked)   //Re-set unlock state before program closes
+            {
+                changeUnlockState();
+            }
+        }
+
+        private void changeUnlockState()
+        {
+            uint status = NativeMethods.SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED);    //Call ex state method with correct flags
+            if (status == 0)
+            {
+                MessageBox.Show("SetThreadExecutionState failed. Do something here...");
+                Close();
+            }
+        }
+
+        internal static class NativeMethods
+        {
+            // Import SetThreadExecutionState Win32 API and necessary flags
+            [DllImport("kernel32.dll")]
+            public static extern uint SetThreadExecutionState(EXECUTION_STATE esFlags);
+        }
+
+        [FlagsAttribute]
+        public enum EXECUTION_STATE : uint
+        {
+            ES_AWAYMODE_REQUIRED = 0x00000040,
+            ES_CONTINUOUS = 0x80000000,
+            ES_DISPLAY_REQUIRED = 0x00000002,
+            ES_SYSTEM_REQUIRED = 0x00000001
+            // Legacy flag, should not be used.
+            // ES_USER_PRESENT = 0x00000004
+        }
     }
 }

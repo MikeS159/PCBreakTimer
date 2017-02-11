@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -29,10 +30,14 @@ namespace PCBreakTimer
             WorkDayTextBox.Text = Settings.Default.WorkingDay.ToString();
             AddTimeTextBox.Text = Settings.Default.AddTime.ToString();
             MaxTimeTextBox.Text = Settings.Default.DefaultBreakTime.ToString();
-            WinXPosTextBox.Text = Settings.Default.WindowXPos.ToString();
-            WinYPosTextBox.Text = Settings.Default.WindowYPos.ToString();
+            WinXPosTextBox.Text = Settings.Default.WindowXPos.ToString(CultureInfo.InvariantCulture);
+            WinYPosTextBox.Text = Settings.Default.WindowYPos.ToString(CultureInfo.InvariantCulture);
+            workingPatternTB.Text = Settings.Default.WorkingPattern;
+            lunchPatternTB.Text = Settings.Default.LunchPattern;
             PopupMessageCheckBox.Checked = Settings.Default.PopUpWarning;
             StartMinimizedCheckBox.Checked = Settings.Default.StartMinimized;
+            useWorkingPatternCheckBox.Checked = Settings.Default.UseWorkingPattern;
+            keepUnlockedCheckBox.Checked = Settings.Default.KeepUnlocked;
         }
 
         private void SettingsForm_Load(object sender, EventArgs e)
@@ -101,8 +106,12 @@ namespace PCBreakTimer
             {
                 MessageBox.Show("Please enter a valid integer");
             }
+            Settings.Default.WorkingPattern = workingPatternTB.Text;
+            Settings.Default.LunchPattern = lunchPatternTB.Text;
             Settings.Default.PopUpWarning = PopupMessageCheckBox.Checked;
             Settings.Default.StartMinimized = StartMinimizedCheckBox.Checked;
+            Settings.Default.UseWorkingPattern = useWorkingPatternCheckBox.Checked;
+            Settings.Default.KeepUnlocked = keepUnlockedCheckBox.Checked;
             Settings.Default.Save();
         }
     }

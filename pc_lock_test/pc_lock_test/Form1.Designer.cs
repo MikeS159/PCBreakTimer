@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainProgramForm));
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -54,6 +55,11 @@
             this.testLockBtn = new System.Windows.Forms.Button();
             this.testUnlockBtn = new System.Windows.Forms.Button();
             this.BreakWarningLabel = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.TimeLeftLabel = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.homeAtLabel = new System.Windows.Forms.Label();
+            this.licenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,7 +68,7 @@
             this.richTextBox1.Location = new System.Drawing.Point(5, 27);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(275, 188);
+            this.richTextBox1.Size = new System.Drawing.Size(275, 227);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
@@ -131,9 +137,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(293, 126);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(57, 13);
+            this.label4.Size = new System.Drawing.Size(66, 13);
             this.label4.TabIndex = 8;
-            this.label4.Text = "Total Time";
+            this.label4.Text = "Total Time - ";
             // 
             // TotalTimeLabel
             // 
@@ -152,7 +158,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(477, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(484, 24);
             this.menuStrip1.TabIndex = 11;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -168,14 +174,14 @@
             // minimizeToolStripMenuItem
             // 
             this.minimizeToolStripMenuItem.Name = "minimizeToolStripMenuItem";
-            this.minimizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.minimizeToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.minimizeToolStripMenuItem.Text = "Minimize";
             this.minimizeToolStripMenuItem.Click += new System.EventHandler(this.minimizeToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
@@ -199,6 +205,7 @@
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.readMeToolStripMenuItem,
             this.versionHistoryToolStripMenuItem,
+            this.licenceToolStripMenuItem,
             this.aboutToolStripMenuItem1});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
@@ -228,7 +235,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(296, 153);
+            this.label5.Location = new System.Drawing.Point(293, 192);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(79, 13);
             this.label5.TabIndex = 12;
@@ -237,7 +244,7 @@
             // PercentageLabel
             // 
             this.PercentageLabel.AutoSize = true;
-            this.PercentageLabel.Location = new System.Drawing.Point(396, 153);
+            this.PercentageLabel.Location = new System.Drawing.Point(393, 192);
             this.PercentageLabel.Name = "PercentageLabel";
             this.PercentageLabel.Size = new System.Drawing.Size(15, 13);
             this.PercentageLabel.TabIndex = 13;
@@ -246,7 +253,7 @@
             // testLockBtn
             // 
             this.testLockBtn.Enabled = false;
-            this.testLockBtn.Location = new System.Drawing.Point(294, 192);
+            this.testLockBtn.Location = new System.Drawing.Point(290, 257);
             this.testLockBtn.Name = "testLockBtn";
             this.testLockBtn.Size = new System.Drawing.Size(75, 23);
             this.testLockBtn.TabIndex = 14;
@@ -258,7 +265,7 @@
             // testUnlockBtn
             // 
             this.testUnlockBtn.Enabled = false;
-            this.testUnlockBtn.Location = new System.Drawing.Point(375, 192);
+            this.testUnlockBtn.Location = new System.Drawing.Point(371, 257);
             this.testUnlockBtn.Name = "testUnlockBtn";
             this.testUnlockBtn.Size = new System.Drawing.Size(75, 23);
             this.testUnlockBtn.TabIndex = 15;
@@ -271,19 +278,66 @@
             // 
             this.BreakWarningLabel.AutoSize = true;
             this.BreakWarningLabel.ForeColor = System.Drawing.Color.Red;
-            this.BreakWarningLabel.Location = new System.Drawing.Point(296, 176);
+            this.BreakWarningLabel.Location = new System.Drawing.Point(298, 241);
             this.BreakWarningLabel.Name = "BreakWarningLabel";
             this.BreakWarningLabel.Size = new System.Drawing.Size(72, 13);
             this.BreakWarningLabel.TabIndex = 16;
             this.BreakWarningLabel.Text = "Take a Break";
             this.BreakWarningLabel.Visible = false;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(293, 158);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(60, 13);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "Time Left - ";
+            // 
+            // TimeLeftLabel
+            // 
+            this.TimeLeftLabel.AutoSize = true;
+            this.TimeLeftLabel.Location = new System.Drawing.Point(393, 158);
+            this.TimeLeftLabel.Name = "TimeLeftLabel";
+            this.TimeLeftLabel.Size = new System.Drawing.Size(49, 13);
+            this.TimeLeftLabel.TabIndex = 18;
+            this.TimeLeftLabel.Text = "00:00:00";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(293, 216);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(48, 13);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "Home At";
+            // 
+            // homeAtLabel
+            // 
+            this.homeAtLabel.AutoSize = true;
+            this.homeAtLabel.Location = new System.Drawing.Point(393, 216);
+            this.homeAtLabel.Name = "homeAtLabel";
+            this.homeAtLabel.Size = new System.Drawing.Size(49, 13);
+            this.homeAtLabel.TabIndex = 20;
+            this.homeAtLabel.Text = "00:00:00";
+            // 
+            // licenceToolStripMenuItem
+            // 
+            this.licenceToolStripMenuItem.Name = "licenceToolStripMenuItem";
+            this.licenceToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.licenceToolStripMenuItem.Text = "Licence";
+            this.licenceToolStripMenuItem.Click += new System.EventHandler(this.licenceToolStripMenuItem_Click);
+            // 
             // MainProgramForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(477, 221);
+            this.ClientSize = new System.Drawing.Size(484, 286);
             this.ControlBox = false;
+            this.Controls.Add(this.homeAtLabel);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.TimeLeftLabel);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.BreakWarningLabel);
             this.Controls.Add(this.testUnlockBtn);
             this.Controls.Add(this.testLockBtn);
@@ -300,6 +354,7 @@
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -343,6 +398,11 @@
         private System.Windows.Forms.Button testLockBtn;
         private System.Windows.Forms.Button testUnlockBtn;
         private System.Windows.Forms.Label BreakWarningLabel;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label TimeLeftLabel;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label homeAtLabel;
+        private System.Windows.Forms.ToolStripMenuItem licenceToolStripMenuItem;
     }
 }
 
