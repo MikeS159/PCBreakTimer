@@ -11,6 +11,7 @@ namespace PCBreakTimer
         
         static Version_History()
         {
+            programVersionHistory.Add("0.10.2 - 14/02/2017:", "Change method of keeping screen unlocked to a 1 pixel mouse nudge in the y direction (back and forth) as old method was not working");
             programVersionHistory.Add("0.10.1 - 08/02/2017:", "Now allows screen off when the PC is locked and will resume keeping unlocked (if the user option is enabled) when unlocked again \n-Bug fix where text was incorrectly displayed on some message box windows and take a break message had the wrong tray icon");
             programVersionHistory.Add("0.10.0 - 07/02/2017:", "Added user option to stop the computer locking or the screen going to sleep");
             programVersionHistory.Add("0.9.3 - 20/01/2017:", "Fixed formatting issue with time left until home where each number would be negative, causing rounding problems for hours. One minus sign is now used \n-Changed icon to reduce .exe size");

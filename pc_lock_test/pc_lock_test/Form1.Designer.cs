@@ -35,7 +35,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.HomeTimeLabel = new System.Windows.Forms.Label();
             this.AwayTimeLabel = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timeUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.label3 = new System.Windows.Forms.Label();
             this.LastBreakLabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -49,6 +49,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.readMeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.versionHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.licenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.label5 = new System.Windows.Forms.Label();
             this.PercentageLabel = new System.Windows.Forms.Label();
@@ -59,7 +60,7 @@
             this.TimeLeftLabel = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.homeAtLabel = new System.Windows.Forms.Label();
-            this.licenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.keepUnlockedTimer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -109,10 +110,10 @@
             this.AwayTimeLabel.TabIndex = 4;
             this.AwayTimeLabel.Text = "00:00:00";
             // 
-            // timer1
+            // timeUpdateTimer
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timeUpdateTimer.Enabled = true;
+            this.timeUpdateTimer.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // label3
             // 
@@ -196,7 +197,7 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -224,6 +225,13 @@
             this.versionHistoryToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.versionHistoryToolStripMenuItem.Text = "Version History";
             this.versionHistoryToolStripMenuItem.Click += new System.EventHandler(this.versionHistoryToolStripMenuItem_Click);
+            // 
+            // licenceToolStripMenuItem
+            // 
+            this.licenceToolStripMenuItem.Name = "licenceToolStripMenuItem";
+            this.licenceToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.licenceToolStripMenuItem.Text = "Licence";
+            this.licenceToolStripMenuItem.Click += new System.EventHandler(this.licenceToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem1
             // 
@@ -321,12 +329,10 @@
             this.homeAtLabel.TabIndex = 20;
             this.homeAtLabel.Text = "00:00:00";
             // 
-            // licenceToolStripMenuItem
+            // keepUnlockedTimer
             // 
-            this.licenceToolStripMenuItem.Name = "licenceToolStripMenuItem";
-            this.licenceToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.licenceToolStripMenuItem.Text = "Licence";
-            this.licenceToolStripMenuItem.Click += new System.EventHandler(this.licenceToolStripMenuItem_Click);
+            this.keepUnlockedTimer.Interval = 59000;
+            this.keepUnlockedTimer.Tick += new System.EventHandler(this.keepUnlockedTimer_Tick);
             // 
             // MainProgramForm
             // 
@@ -378,7 +384,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label HomeTimeLabel;
         private System.Windows.Forms.Label AwayTimeLabel;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timeUpdateTimer;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label LastBreakLabel;
         private System.Windows.Forms.Label label4;
@@ -403,6 +409,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label homeAtLabel;
         private System.Windows.Forms.ToolStripMenuItem licenceToolStripMenuItem;
+        private System.Windows.Forms.Timer keepUnlockedTimer;
     }
 }
 
