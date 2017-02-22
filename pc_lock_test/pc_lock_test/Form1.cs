@@ -15,12 +15,13 @@ using System.Timers;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using LedCSharp;
 
 namespace PCBreakTimer
 {
     public partial class MainProgramForm : Form
     {
-        #region Varibles
+#region Varibles
         
         private static SessionSwitchEventHandler sseh;
         SettingsForm userSettingsForm = new SettingsForm();
@@ -131,6 +132,12 @@ namespace PCBreakTimer
             {
                 showCurrentForm();
             }
+
+            LogitechGSDK.LogiLedInit();
+            LogitechGSDK.LogiLedSaveCurrentLighting();
+
+            //LogitechGSDK.LogiLedRestoreLighting();
+            //LogitechGSDK.LogiLedShutdown();
         }
 
         protected override void SetVisibleCore(bool value)
@@ -321,6 +328,7 @@ namespace PCBreakTimer
 
         private void Lock()
         {
+            timer2.Enabled = true;
             homeStopWatch.Stop();
             awayStopwatch.Start();
             lastBreakStopwatch.Stop();
@@ -343,6 +351,8 @@ namespace PCBreakTimer
 
         private void Unlock()
         {
+            timer2.Enabled = false;
+            LogitechGSDK.LogiLedRestoreLighting();
             if (!firstEvent)
             {
                 awayStopwatch.Stop();
@@ -581,6 +591,22 @@ namespace PCBreakTimer
             ES_SYSTEM_REQUIRED = 0x00000001
             // Legacy flag, should not be used.
             // ES_USER_PRESENT = 0x00000004
+        }
+        int i = 0;
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            var frequency = .4;
+            double red, green, blue;
+            red = Math.Sin(frequency * i + 0) * 127 + 128;
+            green = Math.Sin(frequency * i + 2) * 127 + 128;
+            blue = Math.Sin(frequency * i + 4) * 127 + 128;
+            red = red / 255 * 100;
+            green = green / 255 * 100;
+            blue = blue / 255 * 100;
+            LogitechGSDK.LogiLedSetLighting((int)(red), (int)(green), (int)(blue));
+            i++;
+            if (i >= 32)
+                i = 0;                 
         }
     }
 }

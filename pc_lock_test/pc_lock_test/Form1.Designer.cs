@@ -49,6 +49,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.readMeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.versionHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.licenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.label5 = new System.Windows.Forms.Label();
             this.PercentageLabel = new System.Windows.Forms.Label();
@@ -59,7 +60,7 @@
             this.TimeLeftLabel = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.homeAtLabel = new System.Windows.Forms.Label();
-            this.licenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -214,21 +215,28 @@
             // readMeToolStripMenuItem
             // 
             this.readMeToolStripMenuItem.Name = "readMeToolStripMenuItem";
-            this.readMeToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.readMeToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.readMeToolStripMenuItem.Text = "Read Me";
             this.readMeToolStripMenuItem.Click += new System.EventHandler(this.readMeToolStripMenuItem_Click);
             // 
             // versionHistoryToolStripMenuItem
             // 
             this.versionHistoryToolStripMenuItem.Name = "versionHistoryToolStripMenuItem";
-            this.versionHistoryToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.versionHistoryToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.versionHistoryToolStripMenuItem.Text = "Version History";
             this.versionHistoryToolStripMenuItem.Click += new System.EventHandler(this.versionHistoryToolStripMenuItem_Click);
+            // 
+            // licenceToolStripMenuItem
+            // 
+            this.licenceToolStripMenuItem.Name = "licenceToolStripMenuItem";
+            this.licenceToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.licenceToolStripMenuItem.Text = "Licence";
+            this.licenceToolStripMenuItem.Click += new System.EventHandler(this.licenceToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem1
             // 
             this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
-            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(154, 22);
+            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
             this.aboutToolStripMenuItem1.Text = "About";
             this.aboutToolStripMenuItem1.Click += new System.EventHandler(this.aboutToolStripMenuItem1_Click);
             // 
@@ -321,12 +329,10 @@
             this.homeAtLabel.TabIndex = 20;
             this.homeAtLabel.Text = "00:00:00";
             // 
-            // licenceToolStripMenuItem
+            // timer2
             // 
-            this.licenceToolStripMenuItem.Name = "licenceToolStripMenuItem";
-            this.licenceToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.licenceToolStripMenuItem.Text = "Licence";
-            this.licenceToolStripMenuItem.Click += new System.EventHandler(this.licenceToolStripMenuItem_Click);
+            this.timer2.Interval = 250;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // MainProgramForm
             // 
@@ -403,6 +409,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label homeAtLabel;
         private System.Windows.Forms.ToolStripMenuItem licenceToolStripMenuItem;
+        private System.Windows.Forms.Timer timer2;
     }
 }
 
