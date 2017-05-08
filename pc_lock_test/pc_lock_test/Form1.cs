@@ -83,7 +83,7 @@ namespace PCBreakTimer
             if(keepUnlocked)
             {
                 // Set new state to prevent system sleep
-                changeUnlockTimerState();
+                changeUnlockState();
             }
             if(userWorkingPattern)
             {
@@ -334,8 +334,7 @@ namespace PCBreakTimer
             {
                 firstEvent = false;
                 initialStopwatch.Reset();
-            }
-            keepUnlockedTimer.Enabled = false; //Don't move mouse while logged out
+            }            
         }
 
         private void Unlock()
@@ -361,8 +360,7 @@ namespace PCBreakTimer
                 AwayTimeLabel.Text = awayTimeSpan.ToString(timeFormat, sessionCulture);
                 lastBreakStopwatch.Restart();
                 firstEvent = false;                
-            }
-            changeUnlockTimerState();   //Start moving mouse again if enabled when user logs back in
+            }            
         }
 
 #endregion
@@ -450,7 +448,11 @@ namespace PCBreakTimer
             lunchPattern = Settings.Default.LunchPattern;
             userWorkingPattern = Settings.Default.UseWorkingPattern;
             keepUnlocked = Settings.Default.KeepUnlocked;
-            changeUnlockTimerState();    //If the setting has been change, the unlock state needs to be upated
+            if (!keepUnlocked == Settings.Default.KeepUnlocked)
+            {
+                keepUnlocked = Settings.Default.KeepUnlocked;
+                changeUnlockState();    //If the setting has been change, the unlock state needs to be upated
+            }
         }
 
         private void reloadSettings()
@@ -479,6 +481,7 @@ namespace PCBreakTimer
             if (dailyLunchTimes.Length == daysInWeek && dailyWorkingTimes.Length == daysInWeek)
             {
                 DateTime today = DateTime.Now;
+                today = today.AddDays(4);
                 switch (today.DayOfWeek)
                 {
                     case DayOfWeek.Monday:
@@ -536,24 +539,43 @@ namespace PCBreakTimer
 
         }
 
-        private void changeUnlockTimerState()
-        {
-            keepUnlockedTimer.Enabled = keepUnlocked;
-        }
-
         protected override void OnClosed(System.EventArgs e)
         {
             base.OnClosed(e);
+            // Restore previous state
+            if (keepUnlocked)   //Re-set unlock state before program closes
+            {
+                changeUnlockState();
+            }
         }
 
-        private void keepUnlockedTimer_Tick(object sender, EventArgs e)
+        private void changeUnlockState()
         {
-            // Set the Current cursor, move the cursor's Position,
-            // and set its clipping rectangle to the form. 
-            this.Cursor = new Cursor(Cursor.Current.Handle);
-            Cursor.Position = new Point(Cursor.Position.X, Cursor.Position.Y - 1);
-            Cursor.Position = new Point(Cursor.Position.X, Cursor.Position.Y + 1);
-            //Cursor.Clip = new Rectangle(this.Location, this.Size);
+            uint status = NativeMethods.SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED);    //Call ex state method with correct flags
+            if (status == 0)
+            {
+                MessageBox.Show("SetThreadExecutionState failed. Do something here...");
+                Close();
+            }
         }
+
+        internal static class NativeMethods
+        {
+            // Import SetThreadExecutionState Win32 API and necessary flags
+            [DllImport("kernel32.dll")]
+            public static extern uint SetThreadExecutionState(EXECUTION_STATE esFlags);
+        }
+
+        [FlagsAttribute]
+        public enum EXECUTION_STATE : uint
+        {
+            ES_AWAYMODE_REQUIRED = 0x00000040,
+            ES_CONTINUOUS = 0x80000000,
+            ES_DISPLAY_REQUIRED = 0x00000002,
+            ES_SYSTEM_REQUIRED = 0x00000001
+            // Legacy flag, should not be used.
+            // ES_USER_PRESENT = 0x00000004
+        }
+
     }
 }

@@ -60,7 +60,6 @@
             this.TimeLeftLabel = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.homeAtLabel = new System.Windows.Forms.Label();
-            this.keepUnlockedTimer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -197,7 +196,7 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -329,11 +328,6 @@
             this.homeAtLabel.TabIndex = 20;
             this.homeAtLabel.Text = "00:00:00";
             // 
-            // keepUnlockedTimer
-            // 
-            this.keepUnlockedTimer.Interval = 59000;
-            this.keepUnlockedTimer.Tick += new System.EventHandler(this.keepUnlockedTimer_Tick);
-            // 
             // MainProgramForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -409,7 +403,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label homeAtLabel;
         private System.Windows.Forms.ToolStripMenuItem licenceToolStripMenuItem;
-        private System.Windows.Forms.Timer keepUnlockedTimer;
     }
 }
 
