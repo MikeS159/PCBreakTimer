@@ -481,7 +481,6 @@ namespace PCBreakTimer
             if (dailyLunchTimes.Length == daysInWeek && dailyWorkingTimes.Length == daysInWeek)
             {
                 DateTime today = DateTime.Now;
-                today = today.AddDays(4);
                 switch (today.DayOfWeek)
                 {
                     case DayOfWeek.Monday:
