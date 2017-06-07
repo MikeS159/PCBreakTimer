@@ -11,6 +11,7 @@ namespace PCBreakTimer
         
         static Version_History()
         {
+            programVersionHistory.Add("0.10.5 - 07/06/2017:", "Implemted proper fix to ");
             programVersionHistory.Add("0.10.4 - 09/05/2017:", "Forgot to remove test code which added 4 days to date calculation program");
             programVersionHistory.Add("0.10.3 - 08/05/2017:", "Changed method of preventing computer from sleeping to the orignal verion in 0.10.0 \n-Couldn't not reproduce ");
             programVersionHistory.Add("0.10.2 - 14/02/2017:", "Change method of keeping screen unlocked to a 1 pixel mouse nudge in the y direction (back and forth) as old method was not working");

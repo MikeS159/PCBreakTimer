@@ -1,17 +1,12 @@
 ﻿using PCBreakTimer.Properties;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Globalization;
 using JR.Utils.GUI.Forms;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using System.Timers;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -21,7 +16,7 @@ namespace PCBreakTimer
     public partial class MainProgramForm : Form
     {
         #region Varibles
-        
+
         private static SessionSwitchEventHandler sseh;
         SettingsForm userSettingsForm = new SettingsForm();
         Stopwatch homeStopWatch = new Stopwatch();
@@ -65,13 +60,13 @@ namespace PCBreakTimer
         string timeFormat = "h'h 'm'm 's's'";
         private bool allowVisible = false;
 
-#endregion
+        #endregion
 
-#region FormElements
+        #region FormElements
 
         public MainProgramForm()
         {
-            InitializeComponent();            
+            InitializeComponent();
 
             if (Settings.Default.UpgradeRequired)
             {
@@ -80,12 +75,15 @@ namespace PCBreakTimer
                 Settings.Default.Save();
                 reloadSettings();
             }
-            if(keepUnlocked)
+            if (keepUnlocked)
             {
-                // Set new state to prevent system sleep
-                changeUnlockState();
+                keepUnlockedTimer.Enabled = true;
             }
-            if(userWorkingPattern)
+            else
+            {
+                keepUnlockedTimer.Enabled = false;
+            }
+            if (userWorkingPattern)
             {
                 parsePatterns();
             }
@@ -105,11 +103,11 @@ namespace PCBreakTimer
             Start();
 
 #if DEBUG
-                testLockBtn.Enabled = true;
-                testLockBtn.Visible = true;
-                testUnlockBtn.Enabled = true;
-                testUnlockBtn.Visible = true;
-                this.FormBorderStyle = FormBorderStyle.SizableToolWindow;
+            testLockBtn.Enabled = true;
+            testLockBtn.Visible = true;
+            testUnlockBtn.Enabled = true;
+            testUnlockBtn.Visible = true;
+            this.FormBorderStyle = FormBorderStyle.SizableToolWindow;
 #endif
         }
 
@@ -184,9 +182,9 @@ namespace PCBreakTimer
             this.Hide();
         }
 
-#endregion
+        #endregion
 
-#region Events
+        #region Events
 
         /// <summary>
         /// Called when the session switch event is triggered
@@ -229,9 +227,9 @@ namespace PCBreakTimer
             richTextBox1.ScrollToCaret();
         }
 
-#endregion
+        #endregion
 
-#region FormButtons
+        #region FormButtons
 
         private void sysTrayIcon_MouseDoubleClick(object sender, EventArgs e)
         {
@@ -252,9 +250,9 @@ namespace PCBreakTimer
             richTextBox1.AppendText(DateTime.Now.ToString(sessionCulture) + " Test Unlock\n");
         }
 
-#endregion
+        #endregion
 
-#region Timers
+        #region Timers
 
         /// <summary>
         /// Used to update forms
@@ -301,9 +299,9 @@ namespace PCBreakTimer
             PercentageLabel.Text = percentageAtDesk.ToString(sessionCulture) + " %";
         }
 
-#endregion
+        #endregion
 
-#region SessionEventMethods
+        #region SessionEventMethods
 
         private void Start()
         {
@@ -334,7 +332,7 @@ namespace PCBreakTimer
             {
                 firstEvent = false;
                 initialStopwatch.Reset();
-            }            
+            }
         }
 
         private void Unlock()
@@ -359,13 +357,13 @@ namespace PCBreakTimer
                 HomeTimeLabel.Text = homeTimeSpan.ToString(timeFormat, sessionCulture);
                 AwayTimeLabel.Text = awayTimeSpan.ToString(timeFormat, sessionCulture);
                 lastBreakStopwatch.Restart();
-                firstEvent = false;                
-            }            
+                firstEvent = false;
+            }
         }
 
-#endregion
+        #endregion
 
-#region MenuItems
+        #region MenuItems
 
         private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -400,7 +398,7 @@ namespace PCBreakTimer
 
         private void licenceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FlexibleMessageBox.Show("The MIT License (MIT) Copyright © 2016 Mike Simpson \n\n" + "This program also uses Flexible Message Box (https://www.codeproject.com/articles/601900/flexiblemessagebox-a-flexible-replacement-for-the)");// + "Icon from - http://www.flaticon.com/authors/madebyoliver \nAvalible under the Creative Commons Licence 3.0 http://creativecommons.org/licenses/by/3.0/");
+            FlexibleMessageBox.Show("The MIT License (MIT) Copyright © 2017 Mike Simpson \n\n" + "This program also uses Flexible Message Box (https://www.codeproject.com/articles/601900/flexiblemessagebox-a-flexible-replacement-for-the) \nCode also adapted from Mouse Jiggler (https://mousejiggler.codeplex.com/) under the Ms-PL Licence");
         }
 
         private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -451,7 +449,7 @@ namespace PCBreakTimer
             if (!keepUnlocked == Settings.Default.KeepUnlocked)
             {
                 keepUnlocked = Settings.Default.KeepUnlocked;
-                changeUnlockState();    //If the setting has been change, the unlock state needs to be upated
+                keepUnlockedTimer.Enabled = keepUnlocked;
             }
         }
 
@@ -534,47 +532,93 @@ namespace PCBreakTimer
                     richTextBox1.AppendText("Work and lunch patterns should contain 7 elements seperated by commas");
                 }
             }
-#endregion
+            #endregion
 
         }
 
         protected override void OnClosed(System.EventArgs e)
         {
             base.OnClosed(e);
-            // Restore previous state
-            if (keepUnlocked)   //Re-set unlock state before program closes
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct LASTINPUTINFO
+        {
+            public static readonly int SizeOf = Marshal.SizeOf(typeof(LASTINPUTINFO));
+
+            [MarshalAs(UnmanagedType.U4)]
+            public UInt32 cbSize;
+            [MarshalAs(UnmanagedType.U4)]
+            public UInt32 dwTime;
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
+
+        static uint GetLastInputTime()
+        {
+            uint idleTime = 0;
+            LASTINPUTINFO lastInputInfo = new LASTINPUTINFO();
+            lastInputInfo.cbSize = (uint)Marshal.SizeOf(lastInputInfo);
+            lastInputInfo.dwTime = 0;
+
+            uint envTicks = (uint)Environment.TickCount;
+
+            if (GetLastInputInfo(ref lastInputInfo))
             {
-                changeUnlockState();
+                uint lastInputTick = lastInputInfo.dwTime;
+
+                idleTime = envTicks - lastInputTick;
+            }
+
+            return ((idleTime > 0) ? (idleTime / 1000) : 0);
+        }
+
+        public static class Jiggler
+        {
+            internal const int INPUT_MOUSE = 0;
+            internal const int MOUSEEVENTF_MOVE = 0x0001;
+
+            [DllImport("user32.dll", SetLastError = true)]
+            private static extern uint SendInput(uint nInputs, ref INPUT pInputs, int cbSize);
+
+            public static void Jiggle(int dx, int dy)
+            {
+                var inp = new INPUT();
+                inp.TYPE = Jiggler.INPUT_MOUSE;
+                inp.dx = dx;
+                inp.dy = dy;
+                inp.mouseData = 0;
+                inp.dwFlags = Jiggler.MOUSEEVENTF_MOVE;
+                inp.time = 0;
+                inp.dwExtraInfo = (IntPtr)0;
+
+                if (SendInput(1, ref inp, 28) != 1)
+                    throw new Win32Exception();
             }
         }
 
-        private void changeUnlockState()
+        /* This is a kludge, presetting all this, but WTF. It works.
+         * And for a program this trivial, who's bothered? */
+
+        internal struct INPUT
         {
-            uint status = NativeMethods.SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED);    //Call ex state method with correct flags
-            if (status == 0)
+            public int TYPE;
+            public IntPtr dwExtraInfo;
+            public int dwFlags;
+            public int dx;
+            public int dy;
+            public int mouseData;
+            public int time;
+        }
+
+        private void keepUnlockedTimer_Tick(object sender, EventArgs e)
+        {
+            uint lastInput = GetLastInputTime();
+            if (lastInput > 50)
             {
-                MessageBox.Show("SetThreadExecutionState failed. Do something here...");
-                Close();
+                Jiggler.Jiggle(1, 1);
             }
         }
-
-        internal static class NativeMethods
-        {
-            // Import SetThreadExecutionState Win32 API and necessary flags
-            [DllImport("kernel32.dll")]
-            public static extern uint SetThreadExecutionState(EXECUTION_STATE esFlags);
-        }
-
-        [FlagsAttribute]
-        public enum EXECUTION_STATE : uint
-        {
-            ES_AWAYMODE_REQUIRED = 0x00000040,
-            ES_CONTINUOUS = 0x80000000,
-            ES_DISPLAY_REQUIRED = 0x00000002,
-            ES_SYSTEM_REQUIRED = 0x00000001
-            // Legacy flag, should not be used.
-            // ES_USER_PRESENT = 0x00000004
-        }
-
     }
 }

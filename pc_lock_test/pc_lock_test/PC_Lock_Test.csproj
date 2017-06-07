@@ -24,17 +24,17 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>\\cifxdcawppa0001\home_business\T0177633\Software Updates\PCBreakTimer\</InstallUrl>
     <UpdateUrl>\\cifxdcawppa0001\home_business\T0177633\Software Updates\PCBreakTimer\</UpdateUrl>
     <SupportUrl>http://procrastinatingengineer.co.uk/</SupportUrl>
     <ProductName>PC Break Timer</ProductName>
     <PublisherName>Mike Simpson</PublisherName>
     <SuiteName>Procrastinating Engineer</SuiteName>
     <MinimumRequiredVersion>0.7.6.0</MinimumRequiredVersion>
-    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>0.10.4.%2a</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>0.10.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>

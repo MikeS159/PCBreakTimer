@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mike Simpson")]
 [assembly: AssemblyProduct("PC Break Timer")]
-[assembly: AssemblyCopyright("Copyright © Mike Simpson 2015")]
+[assembly: AssemblyCopyright("Copyright © Mike Simpson 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-GB")]
@@ -35,14 +35,14 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.5.*")]
 [assembly: CLSCompliant(true)]
-[assembly: AssemblyVersion("0.10.4.*")]
+[assembly: AssemblyVersion("0.10.5.*")]
 //[assembly: AssemblyFileVersion("1.5.*")]
 #if DEBUG
-[assembly: AssemblyInformationalVersion("0.10.4 DevBuild")]
+[assembly: AssemblyInformationalVersion("0.10.5 DevBuild")]
 #elif ALPHA
-[assembly: AssemblyInformationalVersion("0.10.4 Alpha")]
+[assembly: AssemblyInformationalVersion("0.10.5 Alpha")]
 #elif BETA
-[assembly: AssemblyInformationalVersion("0.10.4 Beta")]
+[assembly: AssemblyInformationalVersion("0.10.5 Beta")]
 #else
-[assembly: AssemblyInformationalVersion("0.10.4")]
+[assembly: AssemblyInformationalVersion("0.10.5")]
 #endif
