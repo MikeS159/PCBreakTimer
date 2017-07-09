@@ -135,6 +135,12 @@ namespace PCBreakTimer
 
             LogitechGSDK.LogiLedInit();
             LogitechGSDK.LogiLedSaveCurrentLighting();
+            int x;
+            for (x = 0; x < 300; x++)
+            {
+                LogitechGSDK.LogiLedSetLightingForKeyWithHidCode(x, 100, 100, 100);
+            }
+
 
             //LogitechGSDK.LogiLedRestoreLighting();
             //LogitechGSDK.LogiLedShutdown();
