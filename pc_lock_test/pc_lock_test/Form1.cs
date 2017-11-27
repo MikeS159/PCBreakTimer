@@ -51,11 +51,11 @@ namespace PCBreakTimer
         int windowXPos = Settings.Default.WindowXPos;
         int windowYPos = Settings.Default.WindowYPos;
 #if DEBUG
-        int windowHeight = 320;
-        int windowWidth = 500;
+        int windowHeight = 395;
+        int windowWidth = 663;
 #else
-        int windowHeight = 300;
-        int windowWidth = 500;
+        int windowHeight = 360;
+        int windowWidth = 663;
 #endif
         string timeFormat = "h'h 'm'm 's's'";
         private bool allowVisible = false;
@@ -98,6 +98,8 @@ namespace PCBreakTimer
             sysTrayIcon.ShowBalloonTip(500);
             this.Left = windowXPos;
             this.Top = windowYPos;
+            this.Height = windowHeight;
+            this.Width = windowWidth;
             startTimeDT = DateTime.Now;
             richTextBox1.AppendText("Start Time - " + DateTime.Now.ToString(sessionCulture) + "\n");
             Start();
