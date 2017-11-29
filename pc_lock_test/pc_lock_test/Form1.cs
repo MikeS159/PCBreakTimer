@@ -51,11 +51,11 @@ namespace PCBreakTimer
         int windowXPos = Settings.Default.WindowXPos;
         int windowYPos = Settings.Default.WindowYPos;
 #if DEBUG
-        int windowHeight = 395;
-        int windowWidth = 663;
+        int windowHeight = 320;
+        int windowWidth = 500;
 #else
-        int windowHeight = 360;
-        int windowWidth = 663;
+        int windowHeight = 300;
+        int windowWidth = 500;
 #endif
         string timeFormat = "h'h 'm'm 's's'";
         private bool allowVisible = false;
