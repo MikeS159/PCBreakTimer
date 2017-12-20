@@ -50,6 +50,7 @@ namespace PCBreakTimer
         int currentForm = 1;
         int windowXPos = Settings.Default.WindowXPos;
         int windowYPos = Settings.Default.WindowYPos;
+        bool minimized = false;
 #if DEBUG
         int windowHeight = 320;
         int windowWidth = 500;
@@ -120,9 +121,7 @@ namespace PCBreakTimer
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
-            homeAt = new TimeSpan(startTimeDT.Hour, startTimeDT.Minute, startTimeDT.Second);
-            homeAt = homeAt.Add(workingDay.Add(lunchTime));
-            homeAtLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", Math.Floor(homeAt.TotalHours), homeAt.Minutes, homeAt.Seconds);
+            setHomeAt();
             if (startMinimized)
             {
                 minimizeWindow();
@@ -179,11 +178,26 @@ namespace PCBreakTimer
         {
             windowXPos = this.Left;
             windowYPos = this.Top;
-            timeUpdateTimer.Enabled = false;
+            if (!popUpWarning)
+            {
+                timeUpdateTimer.Enabled = false;
+            }
             this.WindowState = FormWindowState.Minimized;
             this.Hide();
+            minimized = true;
         }
 
+        private void maxamizeWindow()
+        {
+            allowVisible = true;
+            showCurrentForm();
+            if (!popUpWarning)
+            {
+                timeUpdateTimer.Enabled = true;
+            }
+            minimized = false;
+        }
+            
         #endregion
 
         #region Events
@@ -235,9 +249,7 @@ namespace PCBreakTimer
 
         private void sysTrayIcon_MouseDoubleClick(object sender, EventArgs e)
         {
-            allowVisible = true;
-            showCurrentForm();
-            timeUpdateTimer.Enabled = true;
+            maxamizeWindow();
         }
 
         private void testLockBtn_Click(object sender, EventArgs e)
@@ -263,42 +275,54 @@ namespace PCBreakTimer
         /// <param name="e"></param>
         private void timer1_Tick(object sender, EventArgs e)
         {
-            homeUpdateTimeSpan = homeTimeSpan + homeStopWatch.Elapsed;
-            HomeTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(homeUpdateTimeSpan.TotalHours)), homeUpdateTimeSpan.Minutes, homeUpdateTimeSpan.Seconds);
-            awayUpdateTimeSpan = awayTimeSpan + awayStopwatch.Elapsed;
-            AwayTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(awayUpdateTimeSpan.TotalHours)), awayUpdateTimeSpan.Minutes, awayUpdateTimeSpan.Seconds);
+            if (!minimized)
+            {
+                homeUpdateTimeSpan = homeTimeSpan + homeStopWatch.Elapsed;
+                HomeTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(homeUpdateTimeSpan.TotalHours)), homeUpdateTimeSpan.Minutes, homeUpdateTimeSpan.Seconds);
+                awayUpdateTimeSpan = awayTimeSpan + awayStopwatch.Elapsed;
+                AwayTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(awayUpdateTimeSpan.TotalHours)), awayUpdateTimeSpan.Minutes, awayUpdateTimeSpan.Seconds);
+                LastBreakLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(lastBreakTimeSpan.TotalHours)), lastBreakTimeSpan.Minutes, lastBreakTimeSpan.Seconds);
+                totalTime = homeUpdateTimeSpan + awayUpdateTimeSpan;
+                TotalTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(totalTime.TotalHours)), totalTime.Minutes, totalTime.Seconds);
+                timeUntilHome = (workingDay.Add(lunchTime)).Subtract(totalTime);
+                TimeLeftLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(Math.Abs(timeUntilHome.TotalHours))), Math.Abs(timeUntilHome.Minutes), Math.Abs(timeUntilHome.Seconds));
+            }
+
+            //These functions need to be run if the timer is active when minimized to allow the pop-up to appear
             lastBreakTimeSpan = lastBreakStopwatch.Elapsed;
-            LastBreakLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(lastBreakTimeSpan.TotalHours)), lastBreakTimeSpan.Minutes, lastBreakTimeSpan.Seconds);
-            totalTime = homeUpdateTimeSpan + awayUpdateTimeSpan;
-            TotalTimeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(totalTime.TotalHours)), totalTime.Minutes, totalTime.Seconds);
-            timeUntilHome = (workingDay.Add(lunchTime)).Subtract(totalTime);
-            TimeLeftLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", (Math.Floor(Math.Abs(timeUntilHome.TotalHours))), Math.Abs(timeUntilHome.Minutes), Math.Abs(timeUntilHome.Seconds));
             if (lastBreakTimeSpan > maxTime)
             {
-                this.WindowState = FormWindowState.Normal;
-                this.Activate();
                 maxTime = maxTime.Add(addTime);
                 BreakWarningLabel.Visible = true;
                 if (popUpWarning)
                 {
+                    maxamizeWindow();
                     MessageBox.Show("Take a Break!", "Coffee Time", MessageBoxButtons.OK, MessageBoxIcon.Stop, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+                    if(minimized)
+                    {
+                        minimizeWindow();
+                    }
                 }
             }
-            if (totalTime > (workingDay + lunchTime))
+
+            if (!minimized)
             {
-                label4.ForeColor = Color.Red;
-                TotalTimeLabel.ForeColor = Color.Red;
-                TimeLeftLabel.Text = "-" + TimeLeftLabel.Text;
+                if (totalTime > (workingDay + lunchTime))
+                {
+                    label4.ForeColor = Color.Red;
+                    TotalTimeLabel.ForeColor = Color.Red;
+                    TimeLeftLabel.Text = "-" + TimeLeftLabel.Text;
+                }
+                else
+                {
+                    label4.ForeColor = Color.Black;
+                    TotalTimeLabel.ForeColor = Color.Black;
+                }
+                double percentageAtDesk = 0;
+                percentageAtDesk = (100 - ((awayTimeSpan.TotalMilliseconds / totalTime.TotalMilliseconds) * 100));
+                percentageAtDesk = Math.Round(percentageAtDesk, 2);
+                PercentageLabel.Text = percentageAtDesk.ToString(sessionCulture) + " %";
             }
-            else
-            {
-                label4.ForeColor = Color.Black;
-                TotalTimeLabel.ForeColor = Color.Black;
-            }
-            double percentageAtDesk = 0;
-            percentageAtDesk = (100 - ((awayTimeSpan.TotalMilliseconds / totalTime.TotalMilliseconds) * 100));
-            percentageAtDesk = Math.Round(percentageAtDesk, 2);
-            PercentageLabel.Text = percentageAtDesk.ToString(sessionCulture) + " %";
         }
 
         #endregion
@@ -440,7 +464,7 @@ namespace PCBreakTimer
             workingDay = Settings.Default.WorkingDay;
             addTime = Settings.Default.AddTime;
             defaultTime = Settings.Default.DefaultBreakTime;
-            //maxTime = defaultTime;
+            maxTime = defaultTime;
             windowXPos = Settings.Default.WindowXPos;
             windowYPos = Settings.Default.WindowYPos;
             popUpWarning = Settings.Default.PopUpWarning;
@@ -453,6 +477,7 @@ namespace PCBreakTimer
                 keepUnlocked = Settings.Default.KeepUnlocked;
                 keepUnlockedTimer.Enabled = keepUnlocked;
             }
+            setHomeAt();
         }
 
         private void reloadSettings()
@@ -621,6 +646,13 @@ namespace PCBreakTimer
             {
                 Jiggler.Jiggle(1, 1);
             }
+        }
+
+        private void setHomeAt()
+        {
+            homeAt = new TimeSpan(startTimeDT.Hour, startTimeDT.Minute, startTimeDT.Second);
+            homeAt = homeAt.Add(workingDay.Add(lunchTime));
+            homeAtLabel.Text = string.Format("{0:00}:{1:00}:{2:00}", Math.Floor(homeAt.TotalHours), homeAt.Minutes, homeAt.Seconds);
         }
     }
 }
