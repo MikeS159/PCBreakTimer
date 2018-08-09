@@ -103,6 +103,17 @@ namespace PCBreakTimer
             this.Width = windowWidth;
             startTimeDT = DateTime.Now;
             richTextBox1.AppendText("Start Time - " + DateTime.Now.ToString(sessionCulture) + "\n");
+
+            setHomeAt();
+            if (startMinimized)
+            {
+                minimizeWindow();
+            }
+            else
+            {
+                showCurrentForm();
+            }
+
             Start();
 
 #if DEBUG
@@ -121,15 +132,6 @@ namespace PCBreakTimer
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
-            setHomeAt();
-            if (startMinimized)
-            {
-                minimizeWindow();
-            }
-            else
-            {
-                showCurrentForm();
-            }
         }
 
         protected override void SetVisibleCore(bool value)
@@ -182,6 +184,10 @@ namespace PCBreakTimer
             {
                 timeUpdateTimer.Enabled = false;
             }
+            else
+            {
+                timeUpdateTimer.Interval = 10000;
+            }
             this.WindowState = FormWindowState.Minimized;
             this.Hide();
             minimized = true;
@@ -194,6 +200,10 @@ namespace PCBreakTimer
             if (!popUpWarning)
             {
                 timeUpdateTimer.Enabled = true;
+            }
+            else
+            {
+                timeUpdateTimer.Interval = 100;
             }
             minimized = false;
         }
