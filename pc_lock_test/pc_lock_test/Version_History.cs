@@ -11,6 +11,7 @@ namespace PCBreakTimer
         
         static Version_History()
         {
+            programVersionHistory.Add("0.10.10 - 09/08/2018:", "Fixed bug where some events weren't triggering until the form was loaded.\n Reduced CPU usage while minamized and no popups are active.");
             programVersionHistory.Add("0.10.9 - 20/12/2017:", "Fixed issue #1 & #2 on GitHub.");
             programVersionHistory.Add("0.10.8 - 20/12/2017:", "Fixed bug preventing version history from opening (duplicate version number)");
             programVersionHistory.Add("0.10.7 - 27/11/2017:", "Reverted scaling fix from last build, was caused by Windows display scaling");
