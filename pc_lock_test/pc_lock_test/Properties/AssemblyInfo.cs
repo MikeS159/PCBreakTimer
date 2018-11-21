@@ -44,5 +44,5 @@ using System.Runtime.InteropServices;
 #elif BETA
 [assembly: AssemblyInformationalVersion("0.10.10 Beta")]
 #else
-[assembly: AssemblyInformationalVersion("0.10.10")]
+[assembly: AssemblyInformationalVersion("0.10.10 RC1")]
 #endif
